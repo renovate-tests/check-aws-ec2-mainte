@@ -38,7 +38,7 @@ func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error
 		maintes[i].Description = *event.Description
 	}
 
-	sort.Sort(maintes)
+	sort.Stable(maintes)
 	return maintes, nil
 }
 
