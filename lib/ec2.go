@@ -66,7 +66,7 @@ func (self EC2Maintes) Len() int {
 }
 
 func (self EC2Maintes) Less(i, j int) bool {
-	return self[i].NotAfter.Unix() < self[j].NotAfter.Unix()
+	return self[i].NotBefore.Unix() < self[j].NotBefore.Unix()
 }
 
 func (self EC2Maintes) Swap(i, j int) {
