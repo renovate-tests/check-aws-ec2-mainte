@@ -15,11 +15,11 @@ type IEC2Mainte interface {
 	Length() int
 }
 
-func NewEC2Mainte(svc ec2iface.EC2API) (IEC2Mainte, error) {
+func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error) {
 
 	var maintes EC2Maintes
 
-	events, err := maintes.GetMainteInfo(svc)
+	events, err := maintes.GetMainteInfo(svc, instanceIds...)
 	if err != nil {
 		return nil, err
 	}
@@ -43,16 +43,21 @@ func (_ EC2Maintes) getInstanceIdFromMetadata() (string, error) {
 	return d.InstanceID, nil
 }
 
-func (self EC2Maintes) GetMainteInfo(svc ec2iface.EC2API) ([]*ec2.InstanceStatusEvent, error) {
-	instanceId, err := self.getInstanceIdFromMetadata()
-	if err != nil {
-		return nil, err
+func (self EC2Maintes) GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (
+	[]*ec2.InstanceStatusEvent,
+	error,
+) {
+
+	if len(instanceIds) == 0 {
+		instanceId, err := self.getInstanceIdFromMetadata()
+		if err != nil {
+			return nil, err
+		}
+		instanceIds = append(instanceIds, instanceId)
 	}
 
 	d, err := svc.DescribeInstanceStatus(&ec2.DescribeInstanceStatusInput{
-		InstanceIds: []*string{
-			aws.String(instanceId),
-		},
+		InstanceIds: aws.StringSlice(instanceIds),
 	})
 	if err != nil {
 		return nil, err

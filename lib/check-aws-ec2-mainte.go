@@ -15,6 +15,7 @@ var (
 	region       = kingpin.Flag("region", "").Default("ap-northeast-1").String()
 	warnDuration = kingpin.Flag("warning-duration", "").Short('w').Default("240h30m").Duration()
 	critDuration = kingpin.Flag("critical-duration", "").Short('c').Default("120h30s").Duration()
+	instanceIds = kingpin.Flag("instance-ids", "").Short('i').Strings()
 )
 
 func init() {
@@ -29,7 +30,7 @@ func Do() {
 
 func run(args []string) *checkers.Checker {
 
-	mt, err := NewEC2Mainte(ec2.New(session.New()))
+	mt, err := NewEC2Mainte(ec2.New(session.New()), *instanceIds...)
 	if err != nil {
 		return checkers.Unknown(err.Error())
 	}
