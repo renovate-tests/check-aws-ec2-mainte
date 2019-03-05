@@ -12,9 +12,14 @@ import (
 )
 
 var (
-	version = "indev"
+	version    = "indev"
+	goversion  = ""
+	commitHash = ""
+	buildDate  = ""
+)
 
-	app          = kingpin.New("check-aws-ec2-mainte", "").Version(version)
+var (
+	app          = kingpin.New("check-aws-ec2-mainte", fmt.Sprintf("GoVer: %v\tCommitHash: %v\tBuildDate: %v", goversion, commitHash, buildDate)).Version(version).Author("ntrv")
 	region       = app.Flag("region", "").Default("ap-northeast-1").String()
 	warnDuration = app.Flag("warning-duration", "").Short('w').PlaceHolder("1h23m4s").Default("240h").Duration()
 	critDuration = app.Flag("critical-duration", "").Short('c').PlaceHolder("5h56m7s").Default("120h").Duration()
