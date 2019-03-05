@@ -61,7 +61,7 @@ func run(args []string) *checkers.Checker {
 		return checkers.Unknown(err.Error())
 	}
 
-	if mt.Length() != 0 {
+	if mt.Len() != 0 {
 		event := mt.GetCloseEvent()
 
 		if event.IsTimeOver(*critDuration) {

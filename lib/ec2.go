@@ -4,23 +4,23 @@ import (
 	"sort"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 )
 
 type IEC2Mainte interface {
 	GetCloseEvent() EC2Mainte
-	Length() int
+	Len() int
 }
+
+type EC2Maintes []EC2Mainte
 
 func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error) {
 
 	var maintes EC2Maintes
 
 	if len(instanceIds) == 0 {
-		instanceId, err := mainte.getInstanceIdFromMetadata()
+		instanceId, err := getInstanceIdFromMetadata()
 		if err != nil {
 			return nil, err
 		}
@@ -42,15 +42,6 @@ func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error
 	return maintes, nil
 }
 
-func (_ EC2Maintes) getInstanceIdFromMetadata() (string, error) {
-	metadata := ec2metadata.New(session.New())
-	d, err := metadata.GetInstanceIdentityDocument()
-	if err != nil {
-		return "", err
-	}
-	return d.InstanceID, nil
-}
-
 func (self EC2Maintes) GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (
 	[]*ec2.InstanceStatusEvent,
 	error,
@@ -70,6 +61,14 @@ func (self EC2Maintes) GetCloseEvent() EC2Mainte {
 	return self[len(self)-1]
 }
 
-func (self EC2Maintes) Length() int {
+func (self EC2Maintes) Len() int {
 	return len(self)
+}
+
+func (self EC2Maintes) Less(i, j int) bool {
+	return self[i].NotAfter.Unix() < self[j].NotAfter.Unix()
+}
+
+func (self EC2Maintes) Swap(i, j int) {
+	self[i], self[j] = self[j], self[i]
 }
