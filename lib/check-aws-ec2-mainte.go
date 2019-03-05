@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/mackerelio/checkers"
@@ -27,7 +28,7 @@ var (
 var (
 	app = kingpin.New("check-aws-ec2-mainte", revision).Version(version).
 		Author("ntrv")
-	region = app.Flag("region", "AWS Region").
+	region = app.Flag("region", "AWS Region").Required().
 		PlaceHolder("ap-northeast-1").String()
 	warnDuration = app.Flag("warning-duration", "Warning while duration").Short('w').
 			PlaceHolder("1h23m4s").Default("240h").Duration()
@@ -50,7 +51,11 @@ func run(args []string) *checkers.Checker {
 		return checkers.Unknown(err.Error())
 	}
 
-	sess := session.New()
+	sess, err := session.NewSession(&aws.Config{Region: region})
+	if err != nil {
+		return checkers.Unknown(err.Error())
+	}
+
 	mt, err := NewEC2Mainte(ec2.New(sess), *instanceIds...)
 	if err != nil {
 		return checkers.Unknown(err.Error())
@@ -59,7 +64,7 @@ func run(args []string) *checkers.Checker {
 	if mt.Length() != 0 {
 		event := mt.GetCloseEvent()
 
-		if event.IsTimeOver(critDuration) {
+		if event.IsTimeOver(*critDuration) {
 			return checkers.Critical(fmt.Sprintf("%+v", event))
 		}
 		return checkers.Warning(fmt.Sprintf("%+v", event))
