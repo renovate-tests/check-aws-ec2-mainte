@@ -16,14 +16,25 @@ var (
 	goversion  = ""
 	commitHash = ""
 	buildDate  = ""
+	revision   = fmt.Sprintf(
+		"GoVer: %v\tCommitHash: %v\tBuildDate: %v",
+		goversion,
+		commitHash,
+		buildDate,
+	)
 )
 
 var (
-	app          = kingpin.New("check-aws-ec2-mainte", fmt.Sprintf("GoVer: %v\tCommitHash: %v\tBuildDate: %v", goversion, commitHash, buildDate)).Version(version).Author("ntrv")
-	region       = app.Flag("region", "").Default("ap-northeast-1").String()
-	warnDuration = app.Flag("warning-duration", "").Short('w').PlaceHolder("1h23m4s").Default("240h").Duration()
-	critDuration = app.Flag("critical-duration", "").Short('c').PlaceHolder("5h56m7s").Default("120h").Duration()
-	instanceIds  = app.Flag("instance-ids", "Available to specify multiple time").Short('i').PlaceHolder("i-0f456b937f33abe9e").Strings()
+	app = kingpin.New("check-aws-ec2-mainte", revision).Version(version).
+		Author("ntrv")
+	region = app.Flag("region", "AWS Region").
+		PlaceHolder("ap-northeast-1").String()
+	warnDuration = app.Flag("warning-duration", "Warning while duration").Short('w').
+			PlaceHolder("1h23m4s").Default("240h").Duration()
+	critDuration = app.Flag("critical-duration", "Critical while duration").Short('c').
+			PlaceHolder("5h56m7s").Default("120h").Duration()
+	instanceIds = app.Flag("instance-ids", "Available to specify multiple time").Short('i').
+			PlaceHolder("i-0f456b937f33abe9e").Strings()
 )
 
 func Do() {
@@ -47,6 +58,10 @@ func run(args []string) *checkers.Checker {
 
 	if mt.Length() != 0 {
 		event := mt.GetCloseEvent()
+
+		if event.IsTimeOver(critDuration) {
+			return checkers.Critical(fmt.Sprintf("%+v", event))
+		}
 		return checkers.Warning(fmt.Sprintf("%+v", event))
 	}
 
