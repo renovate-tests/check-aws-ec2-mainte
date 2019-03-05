@@ -1,13 +1,25 @@
 package checkawsec2mainte
 
 import (
-	"os"
 	"fmt"
+	"os"
 
-	"github.com/mackerelio/checkers"
-	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/mackerelio/checkers"
+
+	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
+
+var (
+	region       = kingpin.Flag("region", "").Default("ap-northeast-1").String()
+	warnDuration = kingpin.Flag("warning-duration", "").Short('w').Default("240h30m").Duration()
+	critDuration = kingpin.Flag("critical-duration", "").Short('c').Default("120h30s").Duration()
+)
+
+func init() {
+	kingpin.Parse()
+}
 
 func Do() {
 	ckr := run(os.Args[1:])
@@ -24,6 +36,7 @@ func run(args []string) *checkers.Checker {
 
 	if mt.Length() != 0 {
 		event := mt.GetCloseEvent()
+	
 		return checkers.Warning(fmt.Sprintf("%+v", event))
 	}
 
