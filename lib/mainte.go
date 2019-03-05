@@ -21,3 +21,7 @@ func (self EC2Maintes) Less(i, j int) bool {
 func (self EC2Maintes) Swap(i, j int) {
 	self[i], self[j] = self[j], self[i]
 }
+
+func (self EC2Mainte) IsTimeOver(d time.Duration) bool {
+	return time.Now().Add(d).After(self.NotBefore)
+}
