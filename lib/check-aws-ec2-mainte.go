@@ -70,5 +70,5 @@ func run(args []string) *checkers.Checker {
 		return checkers.Warning(fmt.Sprintf("%+v", event))
 	}
 
-	return checkers.Ok("")
+	return checkers.Ok("Not coming EC2 instance events")
 }
