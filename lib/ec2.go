@@ -2,6 +2,7 @@ package checkawsec2mainte
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -33,6 +34,10 @@ func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error
 	}
 
 	for i, event := range events {
+		if strings.Contains(maintes[i].Description, "Completed") {
+			continue
+		}
+
 		maintes[i].NotAfter = *event.NotAfter
 		maintes[i].NotBefore = *event.NotBefore
 		maintes[i].Description = *event.Description
