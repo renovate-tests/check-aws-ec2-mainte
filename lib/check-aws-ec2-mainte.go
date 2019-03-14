@@ -55,7 +55,7 @@ func run(args []string) *checkers.Checker {
 		return checkers.Unknown(err.Error())
 	}
 
-	if *region == "" {
+	if *region != "" {
 		cfg.Region = *region
 	}
 
