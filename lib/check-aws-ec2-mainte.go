@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/mackerelio/checkers"
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
@@ -29,8 +28,7 @@ var (
 	app = kingpin.New("check-aws-ec2-mainte", revision).Version(version).
 		Author("ntrv")
 	region = app.Flag("region", "AWS Region").Short('r').
-			Default(getRegionFromMetadata()).
-			OverrideDefaultFromEnvar("AWS_REGION").String()
+		OverrideDefaultFromEnvar("AWS_REGION").String()
 	warnDuration = app.Flag("warning-duration", "Warning while duration").Short('w').
 			Default("240h").Duration()
 	critDuration = app.Flag("critical-duration", "Critical while duration").Short('c').
@@ -52,12 +50,16 @@ func run(args []string) *checkers.Checker {
 		return checkers.Unknown(err.Error())
 	}
 
-	sess, err := session.NewSession(&aws.Config{Region: region})
+	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		return checkers.Unknown(err.Error())
 	}
 
-	mt, err := NewEC2Mainte(ec2.New(sess), *instanceIds...)
+	if *region == "" {
+		cfg.Region = *region
+	}
+
+	mt, err := NewEC2Mainte(ec2.New(cfg), *instanceIds...)
 	if err != nil {
 		return checkers.Unknown(err.Error())
 	}

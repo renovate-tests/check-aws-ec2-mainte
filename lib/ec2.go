@@ -4,9 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 )
 
 type IEC2Mainte interface {
@@ -20,13 +19,13 @@ func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error
 
 	var maintes EC2Maintes
 
-	if len(instanceIds) == 0 {
-		instanceId, err := getInstanceIdFromMetadata()
-		if err != nil {
-			return nil, err
-		}
-		instanceIds = append(instanceIds, instanceId)
-	}
+	// if len(instanceIds) == 0 {
+	// 	instanceId, err := getInstanceIdFromMetadata()
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	instanceIds = append(instanceIds, instanceId)
+	// }
 
 	events, err := maintes.GetMainteInfo(svc, instanceIds...)
 	if err != nil {
@@ -48,18 +47,20 @@ func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error
 }
 
 func (self EC2Maintes) GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (
-	[]*ec2.InstanceStatusEvent,
+	[]ec2.InstanceStatusEvent,
 	error,
 ) {
 
-	d, err := svc.DescribeInstanceStatus(&ec2.DescribeInstanceStatusInput{
-		InstanceIds: aws.StringSlice(instanceIds),
+	req := svc.DescribeInstanceStatusRequest(&ec2.DescribeInstanceStatusInput{
+		InstanceIds: instanceIds,
 	})
+
+	res, err := req.Send()
 	if err != nil {
 		return nil, err
 	}
 
-	return d.InstanceStatuses[0].Events, nil
+	return res.InstanceStatuses[0].Events, nil
 }
 
 func (self EC2Maintes) GetCloseEvent() EC2Mainte {
