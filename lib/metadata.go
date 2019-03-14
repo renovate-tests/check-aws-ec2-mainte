@@ -3,7 +3,6 @@ package checkawsec2mainte
 import (
 	"net/http"
 	"time"
-	"log"
 
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
@@ -13,7 +12,6 @@ func getInstanceIdFromMetadata() string {
 
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
-		log.Print(err)
 		return ""
 	}
 
@@ -25,7 +23,6 @@ func getInstanceIdFromMetadata() string {
 
 	id, err := m.GetMetadata("instance-id")
 	if err != nil {
-		log.Print(err)
 		return ""
 	}
 
