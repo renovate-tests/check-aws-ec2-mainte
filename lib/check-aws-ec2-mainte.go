@@ -28,7 +28,7 @@ var (
 	app = kingpin.New("check-aws-ec2-mainte", revision).Version(version).
 		Author("ntrv")
 	region = app.Flag("region", "AWS Region").Short('r').
-		OverrideDefaultFromEnvar("AWS_REGION").String()
+			OverrideDefaultFromEnvar("AWS_REGION").Required().String()
 	warnDuration = app.Flag("warning-duration", "Warning while duration").Short('w').
 			Default("240h").Duration()
 	critDuration = app.Flag("critical-duration", "Critical while duration").Short('c').
