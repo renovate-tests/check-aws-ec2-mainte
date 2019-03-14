@@ -1,13 +1,13 @@
 package checkawsec2mainte
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/stretchr/testify/assert"
 )
 
 func initTestServer(path string, resp string) *httptest.Server {
@@ -22,15 +22,22 @@ func initTestServer(path string, resp string) *httptest.Server {
 }
 
 func TestGetInstanceId(t *testing.T) {
+	ast := assert.New(t)
+	expected := "i-09e032cce9ef71d84"
+
 	server := initTestServer(
 		"/latest/meta-data/instance-id",
-		"i-09e032cce9ef71d84",
+		expected,
 	)
 	defer server.Close()
 
-	cfg, _ := external.LoadDefaultAWSConfig()
+	cfg, err := external.LoadDefaultAWSConfig()
+	ast.NoError(err)
 	cfg.EndpointResolver = aws.ResolveWithEndpointURL(server.URL + "/latest")
 
-	fmt.Println(server.URL)
-	fmt.Println(getInstanceIdFromMetadata(cfg))
+	actual, err := getInstanceIdFromMetadata(cfg)
+	ast.NoError(err)
+
+	ast.Equal(expected, actual)
+	ast.NoError(err)
 }
