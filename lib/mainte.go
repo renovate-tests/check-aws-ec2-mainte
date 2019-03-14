@@ -1,13 +1,13 @@
 package checkawsec2mainte
 
-import "time"
+import (
+	"time"
 
-type EC2Mainte struct {
-	NotAfter    time.Time
-	NotBefore   time.Time
-	Description string
-}
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+)
+
+type EC2Mainte ec2.InstanceStatusEvent
 
 func (self EC2Mainte) IsTimeOver(d time.Duration) bool {
-	return time.Now().Add(d).After(self.NotBefore)
+	return time.Now().Add(d).After(*self.NotBefore)
 }

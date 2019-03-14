@@ -15,33 +15,22 @@ type IEC2Mainte interface {
 
 type EC2Maintes []EC2Mainte
 
-func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error) {
+func (e EC2Maintes) Filter(substr string) EC2Maintes {
+	events := EC2Maintes{}
 
-	maintes := EC2Maintes{}
-
-	events, err := maintes.GetMainteInfo(svc, instanceIds...)
-	if err != nil {
-		return nil, err
-	}
-
-	for i, event := range events {
-		if strings.Contains(maintes[i].Description, "Completed") {
+	for _, event := range e {
+		if strings.Contains(*event.Description, substr) {
 			continue
 		}
-
-		maintes[i].NotAfter = *event.NotAfter
-		maintes[i].NotBefore = *event.NotBefore
-		maintes[i].Description = *event.Description
+		events = append(events, event)
 	}
 
-	sort.Stable(maintes)
-	return maintes, nil
+	return events
 }
 
-func (_ EC2Maintes) GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (
-	[]ec2.InstanceStatusEvent,
-	error,
-) {
+func GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (EC2Maintes, error) {
+
+	maintes := EC2Maintes{}
 
 	options := &ec2.DescribeInstanceStatusInput{}
 	if len(instanceIds) != 0 {
@@ -55,7 +44,15 @@ func (_ EC2Maintes) GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (
 		return nil, err
 	}
 
-	return res.InstanceStatuses[0].Events, nil
+	for idx, event := range res.InstanceStatuses[0].Events {
+		maintes[idx].Code = event.Code
+		maintes[idx].NotAfter = event.NotAfter
+		maintes[idx].NotBefore = event.NotBefore
+		maintes[idx].Description = event.Description
+	}
+
+	sort.Stable(maintes)
+	return maintes.Filter("Completed"), nil
 }
 
 func (self EC2Maintes) GetCloseEvent() EC2Mainte {

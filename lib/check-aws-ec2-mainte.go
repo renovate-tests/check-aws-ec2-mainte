@@ -59,7 +59,7 @@ func run(args []string) *checkers.Checker {
 		cfg.Region = *region
 	}
 
-	mt, err := NewEC2Mainte(ec2.New(cfg), *instanceIds...)
+	mt, err := GetMainteInfo(ec2.New(cfg), *instanceIds...)
 	if err != nil {
 		return checkers.Unknown(err.Error())
 	}
