@@ -28,13 +28,13 @@ var (
 	app = kingpin.New("check-aws-ec2-mainte", revision).Version(version).
 		Author("ntrv")
 	region = app.Flag("region", "AWS Region").Short('r').
-			OverrideDefaultFromEnvar("AWS_REGION").Required().String()
+		OverrideDefaultFromEnvar("AWS_REGION").Required().String()
 	warnDuration = app.Flag("warning-duration", "Warning while duration").Short('w').
 			Default("240h").Duration()
 	critDuration = app.Flag("critical-duration", "Critical while duration").Short('c').
 			Default("120h").Duration()
 	instanceIds = app.Flag("instance-ids", "Available to specify multiple time").Short('i').
-			Default(getInstanceIdFromMetadata()).Strings()
+			Strings()
 )
 
 func Do() {
@@ -43,23 +43,40 @@ func Do() {
 	ckr.Exit()
 }
 
-func run(args []string) *checkers.Checker {
+func prepare(args []string) (EC2Maintes, error) {
 
 	_, err := app.Parse(args)
 	if err != nil {
-		return checkers.Unknown(err.Error())
+		return nil, err
 	}
 
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
-		return checkers.Unknown(err.Error())
+		return nil, err
 	}
 
 	if *region != "" {
 		cfg.Region = *region
 	}
 
+	if len(*instanceIds) == 0 {
+		instanceId, err := getInstanceIdFromMetadata(cfg)
+		if err != nil {
+			return nil, err
+		}
+		*instanceIds = append(*instanceIds, instanceId)
+	}
+
 	mt, err := GetMainteInfo(ec2.New(cfg), *instanceIds...)
+	if err != nil {
+		return nil, err
+	}
+	return mt, nil
+}
+
+func run(args []string) *checkers.Checker {
+
+	mt, err := prepare(args)
 	if err != nil {
 		return checkers.Unknown(err.Error())
 	}

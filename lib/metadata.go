@@ -4,17 +4,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go-v2/aws/external"
 )
 
-func getInstanceIdFromMetadata() string {
-
-	cfg, err := external.LoadDefaultAWSConfig()
-	if err != nil {
-		return ""
-	}
-
+func getInstanceIdFromMetadata(cfg aws.Config) (string, error) {
 	cfg.HTTPClient = &http.Client{
 		Timeout: 100 * time.Millisecond,
 	}
@@ -23,8 +17,8 @@ func getInstanceIdFromMetadata() string {
 
 	id, err := m.GetMetadata("instance-id")
 	if err != nil {
-		return ""
+		return "", err
 	}
 
-	return id
+	return id, nil
 }
