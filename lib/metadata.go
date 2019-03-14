@@ -3,40 +3,31 @@ package checkawsec2mainte
 import (
 	"net/http"
 	"time"
+	"log"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
+	"github.com/aws/aws-sdk-go-v2/aws/external"
 )
 
 func getInstanceIdFromMetadata() string {
-	metadata := ec2metadata.New(session.New(), &aws.Config{
-		HTTPClient: &http.Client{Timeout: 100 * time.Millisecond},
-	})
 
-	if !metadata.Available() {
-		return ""
-	}
-
-	d, err := metadata.GetInstanceIdentityDocument()
+	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
-		return ""
-	}
-	return d.InstanceID
-}
-
-func getRegionFromMetadata() string {
-	metadata := ec2metadata.New(session.New(), &aws.Config{
-		HTTPClient: &http.Client{Timeout: 100 * time.Millisecond},
-	})
-
-	if !metadata.Available() {
+		log.Print(err)
 		return ""
 	}
 
-	region, err := metadata.Region()
+	cfg.HTTPClient = &http.Client{
+		Timeout: 100 * time.Millisecond,
+	}
+
+	m := ec2metadata.New(cfg)
+
+	id, err := m.GetMetadata("instance-id")
 	if err != nil {
+		log.Print(err)
 		return ""
 	}
-	return region
+
+	return id
 }
