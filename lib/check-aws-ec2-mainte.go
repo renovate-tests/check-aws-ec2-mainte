@@ -29,13 +29,14 @@ var (
 	app = kingpin.New("check-aws-ec2-mainte", revision).Version(version).
 		Author("ntrv")
 	region = app.Flag("region", "AWS Region").Short('r').
+			Default(getRegionFromMetadata()).
 			OverrideDefaultFromEnvar("AWS_REGION").String()
 	warnDuration = app.Flag("warning-duration", "Warning while duration").Short('w').
 			Default("240h").Duration()
 	critDuration = app.Flag("critical-duration", "Critical while duration").Short('c').
 			Default("120h").Duration()
 	instanceIds = app.Flag("instance-ids", "Available to specify multiple time").Short('i').
-			PlaceHolder("i-1234567890abcdef").Strings()
+			Default(getInstanceIdFromMetadata()).Strings()
 )
 
 func Do() {
