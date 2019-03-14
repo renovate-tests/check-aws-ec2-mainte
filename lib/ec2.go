@@ -17,7 +17,7 @@ type EC2Maintes []EC2Mainte
 
 func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error) {
 
-	var maintes EC2Maintes
+	maintes := EC2Maintes{}
 
 	events, err := maintes.GetMainteInfo(svc, instanceIds...)
 	if err != nil {
