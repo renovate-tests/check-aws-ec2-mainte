@@ -19,14 +19,6 @@ func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error
 
 	var maintes EC2Maintes
 
-	// if len(instanceIds) == 0 {
-	// 	instanceId, err := getInstanceIdFromMetadata()
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	instanceIds = append(instanceIds, instanceId)
-	// }
-
 	events, err := maintes.GetMainteInfo(svc, instanceIds...)
 	if err != nil {
 		return nil, err
@@ -46,14 +38,17 @@ func NewEC2Mainte(svc ec2iface.EC2API, instanceIds ...string) (IEC2Mainte, error
 	return maintes, nil
 }
 
-func (self EC2Maintes) GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (
+func (_ EC2Maintes) GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (
 	[]ec2.InstanceStatusEvent,
 	error,
 ) {
 
-	req := svc.DescribeInstanceStatusRequest(&ec2.DescribeInstanceStatusInput{
-		InstanceIds: instanceIds,
-	})
+	options := &ec2.DescribeInstanceStatusInput{}
+	if len(instanceIds) != 0 {
+		options.InstanceIds = instanceIds
+	}
+
+	req := svc.DescribeInstanceStatusRequest(options)
 
 	res, err := req.Send()
 	if err != nil {
