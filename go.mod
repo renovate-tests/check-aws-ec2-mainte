@@ -1,4 +1,4 @@
-module github.com/ntrv/check-aws-ec2-mainte/lib
+module github.com/ntrv/check-aws-ec2-mainte
 
 go 1.12
 
