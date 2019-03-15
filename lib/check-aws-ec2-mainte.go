@@ -50,6 +50,9 @@ func prepare(args []string) (EC2Maintes, error) {
 		return nil, err
 	}
 
+	// The default configuration sources are:
+	// * Environment Variables
+	// * Shared Configuration and Shared Credentials files.
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		return nil, err
@@ -59,6 +62,7 @@ func prepare(args []string) (EC2Maintes, error) {
 		cfg.Region = *region
 	}
 
+	// Default instanceId is from EC2 metadata
 	if len(*instanceIds) == 0 {
 		instanceId, err := getInstanceIdFromMetadata(cfg)
 		if err != nil {
