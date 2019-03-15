@@ -3,6 +3,7 @@ package checkawsec2mainte
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -88,7 +89,7 @@ func run(args []string) *checkers.Checker {
 	if mt.Len() != 0 {
 		event := mt.GetCloseEvent()
 
-		if event.IsTimeOver(*critDuration) {
+		if event.IsTimeOver(time.Now(), *critDuration) {
 			return checkers.Critical(fmt.Sprintf("%+v", event))
 		}
 		return checkers.Warning(fmt.Sprintf("%+v", event))
