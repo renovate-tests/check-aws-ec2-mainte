@@ -3,6 +3,8 @@ package checkawsec2mainte
 import (
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTimeIsOver(t *testing.T) {
@@ -10,5 +12,5 @@ func TestTimeIsOver(t *testing.T) {
 		NotBefore: time.Now(),
 	}
 
-	mainte.IsTimeOver(time.Now(), 1*time.Hour)
+	assert.True(t, mainte.IsTimeOver(time.Now(), 1*time.Hour))
 }
