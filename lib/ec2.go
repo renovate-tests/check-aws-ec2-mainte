@@ -19,7 +19,7 @@ func (e EC2Maintes) Filter(substr string) EC2Maintes {
 	events := EC2Maintes{}
 
 	for _, event := range e {
-		if strings.Contains(*event.Description, substr) {
+		if strings.Contains(event.Description, substr) {
 			continue
 		}
 		events = append(events, event)
@@ -46,9 +46,9 @@ func GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (EC2Maintes, erro
 
 	for idx, event := range res.InstanceStatuses[0].Events {
 		maintes[idx].Code = event.Code
-		maintes[idx].NotAfter = event.NotAfter
-		maintes[idx].NotBefore = event.NotBefore
-		maintes[idx].Description = event.Description
+		maintes[idx].NotAfter = *event.NotAfter
+		maintes[idx].NotBefore = *event.NotBefore
+		maintes[idx].Description = *event.Description
 	}
 
 	sort.Stable(maintes)
