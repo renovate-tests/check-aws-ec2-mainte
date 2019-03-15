@@ -6,11 +6,6 @@ import (
 
 )
 
-
-func (self EC2Mainte) IsTimeOver(now time.Time, d time.Duration) bool {
-	return now.Add(d).After(*self.NotBefore)
-}
-
 func TestTimeIsOver(t *testing.T) {
 	mainte := EC2Mainte{}
 
