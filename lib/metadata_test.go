@@ -3,7 +3,6 @@ package checkawsec2mainte
 import (
 	"net/http"
 	"net/http/httptest"
-	"path"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -34,8 +33,8 @@ func TestGetInstanceId(t *testing.T) {
 
 	cfg, err := external.LoadDefaultAWSConfig()
 	ast.NoError(err)
-	
-	cfg.EndpointResolver = aws.ResolveWithEndpointURL(path.Join(server.URL, "/latest"))
+
+	cfg.EndpointResolver = aws.ResolveWithEndpointURL(server.URL + "/latest")
 
 	actual, err := getInstanceIdFromMetadata(cfg)
 	ast.NoError(err)
