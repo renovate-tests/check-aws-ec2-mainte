@@ -8,14 +8,14 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 )
 
-type IEC2Mainte interface {
+type IEC2Events interface {
 	GetCloseEvent() EC2Mainte
 	Len() int
 }
 
-type EC2Maintes []EC2Mainte
+type EC2Events []EC2Event
 
-func (e EC2Maintes) Filter(substr string) EC2Maintes {
+func (e EC2Events) Filter(substr string) EC2Events {
 	events := EC2Maintes{}
 
 	for _, event := range e {
@@ -28,9 +28,9 @@ func (e EC2Maintes) Filter(substr string) EC2Maintes {
 	return events
 }
 
-func GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (EC2Maintes, error) {
+func GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (EC2Events, error) {
 
-	maintes := EC2Maintes{}
+	maintes := EC2Events{}
 
 	options := &ec2.DescribeInstanceStatusInput{}
 	if len(instanceIds) != 0 {
@@ -55,18 +55,18 @@ func GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (EC2Maintes, erro
 	return maintes.Filter("Completed"), nil
 }
 
-func (self EC2Maintes) GetCloseEvent() EC2Mainte {
+func (self EC2Events) GetCloseEvent() EC2Events {
 	return self[len(self)-1]
 }
 
-func (self EC2Maintes) Len() int {
+func (self EC2Events) Len() int {
 	return len(self)
 }
 
-func (self EC2Maintes) Less(i, j int) bool {
+func (self EC2Events) Less(i, j int) bool {
 	return self[i].NotBefore.Unix() < self[j].NotBefore.Unix()
 }
 
-func (self EC2Maintes) Swap(i, j int) {
+func (self EC2Events) Swap(i, j int) {
 	self[i], self[j] = self[j], self[i]
 }
