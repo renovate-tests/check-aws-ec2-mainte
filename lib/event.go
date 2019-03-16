@@ -8,6 +8,7 @@ import (
 
 type EC2Event struct {
 	Code        ec2.EventCode
+	InstanceId  string
 	NotBefore   time.Time
 	NotAfter    time.Time
 	Description string

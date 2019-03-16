@@ -24,11 +24,18 @@ func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 		return
 	}
 
-	for i, e := range res.InstanceStatuses[0].Events {
-		events[i].Code = e.Code
-		events[i].NotAfter = *e.NotAfter
-		events[i].NotBefore = *e.NotBefore
-		events[i].Description = *e.Description
+	for _, i := range res.InstanceStatuses {
+		if len(i.Events) != 0 {
+			for _, e := range i.Events {
+				events = append(events, EC2Event{
+					Code:        e.Code,
+					InstanceId:  *i.InstanceId,
+					NotAfter:    *e.NotAfter,
+					NotBefore:   *e.NotBefore,
+					Description: *e.Description,
+				})
+			}
+		}
 	}
 
 	sort.Stable(events)
