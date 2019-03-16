@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"runtime"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -14,12 +15,11 @@ import (
 
 var (
 	version    = "indev"
-	goversion  = ""
 	commitHash = ""
 	buildDate  = ""
 	revision   = fmt.Sprintf(
 		"GoVer: %v\tCommitHash: %v\tBuildDate: %v",
-		goversion,
+		runtime.Version(),
 		commitHash,
 		buildDate,
 	)
@@ -36,6 +36,7 @@ var (
 			Default("120h").Duration()
 	instanceIds = app.Flag("instance-ids", "Available to specify multiple time").Short('i').
 			Strings()
+	isAll = app.Flag("all", "").Short('a').Bool()
 )
 
 func Do() {
@@ -72,7 +73,8 @@ func fetchEvents(args []string) (EC2Events, error) {
 	}
 
 	// Default instanceId is from EC2 metadata
-	if len(*instanceIds) == 0 {
+	// If fetch events for all instances, instanceId must empty
+	if len(*instanceIds) == 0 && !*isAll {
 		instanceId, err := getInstanceIdFromMetadata(cfg)
 		if err != nil {
 			return nil, err
