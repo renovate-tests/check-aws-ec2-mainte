@@ -45,7 +45,7 @@ func Do() {
 	if err != nil {
 		ckr = checkers.Unknown(err.Error())
 	} else {
-		ckr = run(events)
+		ckr = run(events, time.Now())
 	}
 
 	ckr.Name = "EC2 Mainte"
@@ -92,11 +92,11 @@ func fetchEvents(args []string) (EC2Events, error) {
 	return events, nil
 }
 
-func run(events EC2Events) *checkers.Checker {
+func run(events EC2Events, now time.Time) *checkers.Checker {
 	if events.Len() != 0 {
 		event := events.GetCloseEvent()
 
-		if event.IsTimeOver(time.Now(), *critDuration) {
+		if event.IsTimeOver(now, *critDuration) {
 			return checkers.Critical(fmt.Sprintf("%+v", event))
 		}
 		return checkers.Warning(fmt.Sprintf("%+v", event))
