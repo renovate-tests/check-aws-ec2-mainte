@@ -39,12 +39,20 @@ var (
 )
 
 func Do() {
-	ckr := run(os.Args[1:])
+	var ckr *checkers.Checker
+
+	events, err := fetchEvents(os.Args[1:])
+	if err != nil {
+		ckr = checkers.Unknown(err.Error())
+	} else {
+		ckr = run(events)
+	}
+
 	ckr.Name = "EC2 Mainte"
 	ckr.Exit()
 }
 
-func prepare(args []string) (EC2Events, error) {
+func fetchEvents(args []string) (EC2Events, error) {
 
 	_, err := app.Parse(args)
 	if err != nil {
@@ -84,13 +92,7 @@ func prepare(args []string) (EC2Events, error) {
 	return events, nil
 }
 
-func run(args []string) *checkers.Checker {
-
-	events, err := prepare(args)
-	if err != nil {
-		return checkers.Unknown(err.Error())
-	}
-
+func run(events EC2Events) *checkers.Checker {
 	if events.Len() != 0 {
 		event := events.GetCloseEvent()
 
