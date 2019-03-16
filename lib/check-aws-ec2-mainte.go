@@ -44,7 +44,7 @@ func Do() {
 	ckr.Exit()
 }
 
-func prepare(args []string) (EC2Maintes, error) {
+func prepare(args []string) (EC2Events, error) {
 
 	_, err := app.Parse(args)
 	if err != nil {
@@ -72,22 +72,27 @@ func prepare(args []string) (EC2Maintes, error) {
 		*instanceIds = append(*instanceIds, instanceId)
 	}
 
-	mt, err := GetMainteInfo(ec2.New(cfg), *instanceIds...)
+	mt := EC2Mainte{
+		Client:      ec2.New(cfg),
+		InstanceIds: *instanceIds,
+	}
+
+	events, err := mt.GetMainteInfo()
 	if err != nil {
 		return nil, err
 	}
-	return mt, nil
+	return events, nil
 }
 
 func run(args []string) *checkers.Checker {
 
-	mt, err := prepare(args)
+	events, err := prepare(args)
 	if err != nil {
 		return checkers.Unknown(err.Error())
 	}
 
-	if mt.Len() != 0 {
-		event := mt.GetCloseEvent()
+	if events.Len() != 0 {
+		event := events.GetCloseEvent()
 
 		if event.IsTimeOver(time.Now(), *critDuration) {
 			return checkers.Critical(fmt.Sprintf("%+v", event))

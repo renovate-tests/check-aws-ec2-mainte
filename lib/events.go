@@ -24,7 +24,7 @@ func (e EC2Events) Filter(substr string) EC2Events {
 	return events
 }
 
-func (self EC2Events) GetCloseEvent() EC2Events {
+func (self EC2Events) GetCloseEvent() EC2Event {
 	return self[len(self)-1]
 }
 
