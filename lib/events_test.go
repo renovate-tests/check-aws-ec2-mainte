@@ -8,13 +8,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func createTime(t *testing.T, value string) time.Time {
+	d, err := time.Parse(time.RFC3339, value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return d
+}
+
 func createTimes(t *testing.T, values []string) (ds []time.Time) {
 	for _, v := range values {
-		d, err := time.Parse(time.RFC3339, v)
-		if err != nil {
-			t.Fatal(err)
-		}
-		ds = append(ds, d)
+		ds = append(ds, createTime(t, v))
 	}
 	return
 }
