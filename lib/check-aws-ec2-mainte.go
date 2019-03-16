@@ -3,8 +3,8 @@ package checkawsec2mainte
 import (
 	"fmt"
 	"os"
-	"time"
 	"runtime"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -36,7 +36,8 @@ var (
 			Default("120h").Duration()
 	instanceIds = app.Flag("instance-ids", "Available to specify multiple time").Short('i').
 			Strings()
-	isAll = app.Flag("all", "").Short('a').Bool()
+	isAll = app.Flag("all", "Fetch events for all instances").Short('a').
+		Bool()
 )
 
 func Do() {
