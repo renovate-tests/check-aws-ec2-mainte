@@ -1,6 +1,7 @@
 package checkawsec2mainte
 
 import (
+	"sort"
 	"strings"
 )
 
@@ -25,6 +26,9 @@ func (e EC2Events) Filter(substr string) EC2Events {
 }
 
 func (self EC2Events) GetCloseEvent() EC2Event {
+	// Sort as NotBefore date
+	sort.Stable(self)
+
 	return self[len(self)-1]
 }
 

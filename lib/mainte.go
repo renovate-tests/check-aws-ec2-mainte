@@ -1,8 +1,6 @@
 package checkawsec2mainte
 
 import (
-	"sort"
-
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 )
@@ -40,9 +38,6 @@ func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 			}
 		}
 	}
-
-	// Sort as NotBefore date
-	sort.Stable(events)
 
 	// Remove already completed events
 	// https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceStatusEvent.html
