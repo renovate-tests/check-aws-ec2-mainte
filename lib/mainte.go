@@ -14,6 +14,8 @@ type EC2Mainte struct {
 
 func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
+
+	// If InstanceIds is empty, get all EC2 Events
 	if len(e.InstanceIds) != 0 {
 		options.InstanceIds = e.InstanceIds
 	}
@@ -24,6 +26,7 @@ func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 		return
 	}
 
+	// Create EC2 Events from InstanceStatusResponse
 	for _, i := range res.InstanceStatuses {
 		if len(i.Events) != 0 {
 			for _, e := range i.Events {
@@ -38,7 +41,11 @@ func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 		}
 	}
 
+	// Sort as NotBefore date
 	sort.Stable(events)
+
+	// Remove already completed events
+	// https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceStatusEvent.html
 	events = events.Filter("Completed")
 	return
 }

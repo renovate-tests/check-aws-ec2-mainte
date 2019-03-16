@@ -54,6 +54,7 @@ func Do() {
 
 func fetchEvents(args []string) (EC2Events, error) {
 
+	// Parse commandline options
 	_, err := app.Parse(args)
 	if err != nil {
 		return nil, err
@@ -67,6 +68,7 @@ func fetchEvents(args []string) (EC2Events, error) {
 		return nil, err
 	}
 
+	// Set Region from --region
 	if *region != "" {
 		cfg.Region = *region
 	}
