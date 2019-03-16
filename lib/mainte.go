@@ -7,29 +7,31 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 )
 
-func GetMainteInfo(svc ec2iface.EC2API, instanceIds ...string) (EC2Events, error) {
+type EC2Mainte struct {
+	Client      ec2iface.EC2API
+	instanceIds []string
+}
 
-	maintes := EC2Events{}
-
+func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
-	if len(instanceIds) != 0 {
-		options.InstanceIds = instanceIds
+	if len(e.instanceIds) != 0 {
+		options.InstanceIds = e.instanceIds
 	}
 
-	req := svc.DescribeInstanceStatusRequest(options)
-
+	req := e.Client.DescribeInstancesStatusRequest(options)
 	res, err := req.Send()
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	for idx, event := range res.InstanceStatuses[0].Events {
-		maintes[idx].Code = event.Code
-		maintes[idx].NotAfter = *event.NotAfter
-		maintes[idx].NotBefore = *event.NotBefore
-		maintes[idx].Description = *event.Description
+	for i, e := range res.InstanceStatuses[0].Events {
+		events[i].Code = e.Code
+		events[i].NotAfter = *e.NotAfter
+		events[i].NotBefore = *e.NotBefore
+		events[i].Description = *e.Description
 	}
 
-	sort.Stable(maintes)
-	return maintes.Filter("Completed"), nil
+	sort.Stable(events)
+	events = events.Filter("Completed")
+	return
 }
