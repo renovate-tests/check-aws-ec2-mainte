@@ -32,7 +32,7 @@ var (
 		OverrideDefaultFromEnvar("AWS_REGION").Required().String()
 	critDuration = app.Flag("critical-duration", "Critical while duration").Short('c').
 			Default("120h").Duration()
-	instanceIds = app.Flag("instance-ids", "Available to specify multiple time").Short('i').
+	instanceIds = app.Flag("instance-ids", "Filter as EC2 Instance Ids").Short('i').
 			Strings()
 	isAll = app.Flag("all", "Fetch events for all instances").Short('a').
 		Bool()
