@@ -12,7 +12,7 @@ type IEC2Events interface {
 type EC2Events []EC2Event
 
 func (e EC2Events) Filter(substr string) EC2Events {
-	events := EC2Maintes{}
+	events := EC2Events{}
 
 	for _, event := range e {
 		if strings.Contains(event.Description, substr) {

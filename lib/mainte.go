@@ -9,16 +9,16 @@ import (
 
 type EC2Mainte struct {
 	Client      ec2iface.EC2API
-	instanceIds []string
+	InstanceIds []string
 }
 
 func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
-	if len(e.instanceIds) != 0 {
-		options.InstanceIds = e.instanceIds
+	if len(e.InstanceIds) != 0 {
+		options.InstanceIds = e.InstanceIds
 	}
 
-	req := e.Client.DescribeInstancesStatusRequest(options)
+	req := e.Client.DescribeInstanceStatusRequest(options)
 	res, err := req.Send()
 	if err != nil {
 		return
