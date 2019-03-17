@@ -70,3 +70,9 @@ func TestFilterCompleted(t *testing.T) {
 	events = events.Filter("Completed")
 	assert.Len(t, events, 2)
 }
+
+func TestGetCloseEvent(t *testing.T){
+	events := createEvents(t)
+	event := events.GetCloseEvent()
+	assert.Equal(t, events[1], event)
+}
