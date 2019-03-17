@@ -7,6 +7,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/k0kubun/pp"
 )
 
 func TestGetMaintes(t *testing.T) {
@@ -21,6 +23,8 @@ func TestGetMaintes(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
+
+		pp.Println(events)
 
 		assert.Equal(t, c.Expected, events)
 	}

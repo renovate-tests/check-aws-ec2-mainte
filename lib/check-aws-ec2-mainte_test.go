@@ -6,6 +6,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/mackerelio/checkers"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/k0kubun/pp"
 )
 
 func TestCheckerCritical(t *testing.T) {
@@ -19,8 +21,6 @@ func TestCheckerCritical(t *testing.T) {
 		"2019-03-16T16:04:05+09:00",
 		"2019-03-17T03:34:51+09:00",
 	})
-
-
 
 	events := EC2Events{
 		{
@@ -47,7 +47,10 @@ func TestCheckerCritical(t *testing.T) {
 		t.Error(err)
 	}
 	c.now = createTime(t, "2019-03-18T12:23:12+09:00")
+	pp.Println(c)
 
 	ckr := c.run(events)
+	pp.Println(ckr)
+
 	assert.Equal(t, checkers.CRITICAL, ckr.Status)
 }
