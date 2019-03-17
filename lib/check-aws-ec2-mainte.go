@@ -10,56 +10,75 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/mackerelio/checkers"
 
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/jessevdk/go-flags"
 )
 
 var (
 	version    = "indev"
 	commitHash = ""
 	buildDate  = ""
-	revision   = fmt.Sprintf(
-		"GoVer: %v\tCommitHash: %v\tBuildDate: %v",
-		runtime.Version(),
-		commitHash,
-		buildDate,
-	)
 )
 
-var (
-	app = kingpin.New("check-aws-ec2-mainte", revision).Version(version).
-		Author("ntrv")
-	region = app.Flag("region", "AWS Region").Short('r').
-		OverrideDefaultFromEnvar("AWS_REGION").Required().String()
-	critDuration = app.Flag("critical-duration", "Critical while duration").Short('c').
-			Default("120h").Duration()
-	instanceIds = app.Flag("instance-ids", "Filter as EC2 Instance Ids").Short('i').
-			Strings()
-	isAll = app.Flag("all", "Fetch events for all instances").Short('a').
-		Bool()
-)
+type options struct {
+	Region       string        `short:"r" long:"region" value-name:"REGION" required:"true" env:"AWS_REGION" description:"AWS Region"`
+	CritDuration time.Duration `short:"c" long:"critical-duration" value-name:"CRITICAL" description:"Critical while duration"`
+	InstanceIds  []string      `short:"i" long:"instance-ids" value-name:"INSTANCE-ID" description:"Filter as EC2 Instance Ids"`
+	IsAll        bool          `short:"a" long:"all" description:"Fetch all instances events"`
+	Version      func()        `short:"v" long:"version" description:"Print Build Information"`
+}
+
+type Checker struct {
+	opts options
+	now  time.Time
+}
 
 func Do() {
-	var ckr *checkers.Checker
 
-	events, err := fetchEvents(os.Args[1:])
+	c, err := NewChecker(os.Args)
 	if err != nil {
-		ckr = checkers.Unknown(err.Error())
-	} else {
-		ckr = run(events, time.Now())
+		os.Exit(1)
 	}
+
+	events, err := c.fetchEvents()
+	if err != nil {
+		os.Exit(1)
+	}
+
+	ckr := c.run(events)
 
 	ckr.Name = "EC2 Mainte"
 	ckr.Exit()
 }
 
-func fetchEvents(args []string) (EC2Events, error) {
+func NewChecker(args []string) (*Checker, error) {
 
-	// Parse commandline options
-	_, err := app.Parse(args)
+	opts := options{}
+
+	opts.Version = func() {
+		fmt.Fprintf(
+			os.Stderr,
+			"Version: %v\nGoVer: %v\nCommitHash: %v\nBuildDate: %v\n",
+			version,
+			runtime.Version(),
+			commitHash,
+			buildDate,
+		)
+		os.Exit(1)
+	}
+
+	_, err := flags.ParseArgs(&opts, args)
+	fmt.Printf("%+v", opts)
 	if err != nil {
 		return nil, err
 	}
 
+	return &Checker{
+		opts: opts,
+		now:  time.Now(),
+	}, nil
+}
+
+func (c Checker) fetchEvents() (EC2Events, error) {
 	// The default configuration sources are:
 	// * Environment Variables
 	// * Shared Configuration and Shared Credentials files.
@@ -69,23 +88,25 @@ func fetchEvents(args []string) (EC2Events, error) {
 	}
 
 	// Set Region from --region
-	if *region != "" {
-		cfg.Region = *region
+	if c.opts.Region != "" {
+		cfg.Region = c.opts.Region
 	}
 
 	// Default instanceId is from EC2 metadata
 	// If fetch events for all instances, instanceId must empty
-	if len(*instanceIds) == 0 && !*isAll {
+	instanceIds := c.opts.InstanceIds
+
+	if len(c.opts.InstanceIds) == 0 && !c.opts.IsAll {
 		instanceId, err := getInstanceIdFromMetadata(cfg)
 		if err != nil {
 			return nil, err
 		}
-		*instanceIds = append(*instanceIds, instanceId)
+		instanceIds = []string{instanceId}
 	}
 
 	mt := EC2Mainte{
 		Client:      ec2.New(cfg),
-		InstanceIds: *instanceIds,
+		InstanceIds: instanceIds,
 	}
 
 	events, err := mt.GetMainteInfo()
@@ -95,11 +116,11 @@ func fetchEvents(args []string) (EC2Events, error) {
 	return events, nil
 }
 
-func run(events EC2Events, now time.Time) *checkers.Checker {
+func (c Checker) run(events EC2Events) *checkers.Checker {
 	if events.Len() != 0 {
 		event := events.GetCloseEvent()
 
-		if event.IsTimeOver(now, *critDuration) {
+		if event.IsTimeOver(c.now, c.opts.CritDuration) {
 			return checkers.Critical(fmt.Sprintf("%+v", event))
 		}
 		return checkers.Warning(fmt.Sprintf("%+v", event))
