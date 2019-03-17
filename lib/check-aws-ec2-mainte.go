@@ -2,6 +2,7 @@ package checkawsec2mainte
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"runtime"
 	"time"
@@ -37,12 +38,12 @@ func Do() {
 
 	c, err := NewChecker(os.Args)
 	if err != nil {
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	events, err := c.fetchEvents()
 	if err != nil {
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	ckr := c.run(events)
