@@ -20,7 +20,7 @@ func TestCheckerCritical(t *testing.T) {
 		"2019-03-17T03:34:51+09:00",
 	})
 
-	now := createTime(t, "2019-03-18T12:23:12+09:00")
+
 
 	events := EC2Events{
 		{
@@ -39,6 +39,15 @@ func TestCheckerCritical(t *testing.T) {
 		},
 	}
 
-	ckr := run(events, now)
+	c, err := NewChecker([]string{
+		"-c", "1h",
+		"-r", "us-west-1",
+	})
+	if err != nil {
+		t.Error(err)
+	}
+	c.now = createTime(t, "2019-03-18T12:23:12+09:00")
+
+	ckr := c.run(events)
 	assert.Equal(t, checkers.CRITICAL, ckr.Status)
 }
