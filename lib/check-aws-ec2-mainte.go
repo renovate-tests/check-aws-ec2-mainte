@@ -120,9 +120,9 @@ func (c Checker) run(events EC2Events) *checkers.Checker {
 		event := events.GetCloseEvent()
 
 		if event.IsTimeOver(c.Now, c.Opts.CritDuration) {
-			return checkers.Critical(fmt.Sprintf("%+v", event))
+			return checkers.Critical(event.CreateMessage())
 		}
-		return checkers.Warning(fmt.Sprintf("%+v", event))
+		return checkers.Warning(event.CreateMessage())
 	}
 
 	return checkers.Ok("Not coming EC2 instance events")
