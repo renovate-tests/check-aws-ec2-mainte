@@ -46,7 +46,7 @@ func TestCheckerCritical(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	c.now = createTime(t, "2019-03-18T12:23:12+09:00")
+	c.Now = createTime(t, "2019-03-18T12:23:12+09:00")
 	pp.Println(c)
 
 	ckr := c.run(events)

@@ -28,8 +28,8 @@ type options struct {
 }
 
 type Checker struct {
-	opts options
-	now  time.Time
+	Opts options
+	Now  time.Time
 }
 
 func Do() {
@@ -72,8 +72,8 @@ func NewChecker(args []string) (*Checker, error) {
 	}
 
 	return &Checker{
-		opts: opts,
-		now:  time.Now(),
+		Opts: opts,
+		Now:  time.Now(),
 	}, nil
 }
 
@@ -87,15 +87,15 @@ func (c Checker) fetchEvents() (EC2Events, error) {
 	}
 
 	// Set Region from --region
-	if c.opts.Region != "" {
-		cfg.Region = c.opts.Region
+	if c.Opts.Region != "" {
+		cfg.Region = c.Opts.Region
 	}
 
 	// Default instanceId is from EC2 metadata
 	// If fetch events for all instances, instanceId must empty
-	instanceIds := c.opts.InstanceIds
+	instanceIds := c.Opts.InstanceIds
 
-	if len(c.opts.InstanceIds) == 0 && !c.opts.IsAll {
+	if len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll {
 		instanceId, err := getInstanceIdFromMetadata(cfg)
 		if err != nil {
 			return nil, err
@@ -119,7 +119,7 @@ func (c Checker) run(events EC2Events) *checkers.Checker {
 	if events.Len() != 0 {
 		event := events.GetCloseEvent()
 
-		if event.IsTimeOver(c.now, c.opts.CritDuration) {
+		if event.IsTimeOver(c.Now, c.Opts.CritDuration) {
 			return checkers.Critical(fmt.Sprintf("%+v", event))
 		}
 		return checkers.Warning(fmt.Sprintf("%+v", event))
