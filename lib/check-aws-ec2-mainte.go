@@ -25,7 +25,6 @@ type options struct {
 	CritDuration time.Duration `short:"c" long:"critical-duration" default:"72h" description:"Critical while duration"`
 	InstanceIds  []string      `short:"i" long:"instance-id" description:"Filter as EC2 Instance Ids"`
 	IsAll        bool          `short:"a" long:"all" description:"Fetch all instances events"`
-	TimeZone     string        `long:"tz" env:"TZ" default:"Asia/Tokyo" description:"TimeZone to create message"`
 	Version      func()        `short:"v" long:"version" description:"Print Build Information"`
 }
 
@@ -123,9 +122,9 @@ func (c Checker) run(events EC2Events) *checkers.Checker {
 		event := events.GetCloseEvent()
 
 		if event.IsTimeOver(c.Now, c.Opts.CritDuration) {
-			return checkers.Critical(event.CreateMessage(c.Opts.TimeZone))
+			return checkers.Critical(event.CreateMessage())
 		}
-		return checkers.Warning(event.CreateMessage(c.Opts.TimeZone))
+		return checkers.Warning(event.CreateMessage())
 	}
 
 	return checkers.Ok("Not coming EC2 instance events")
