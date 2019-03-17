@@ -20,9 +20,9 @@ var (
 )
 
 type options struct {
-	Region       string        `short:"r" long:"region" value-name:"REGION" required:"true" env:"AWS_REGION" description:"AWS Region"`
-	CritDuration time.Duration `short:"c" long:"critical-duration" value-name:"CRITICAL" description:"Critical while duration"`
-	InstanceIds  []string      `short:"i" long:"instance-ids" value-name:"INSTANCE-ID" description:"Filter as EC2 Instance Ids"`
+	Region       string        `short:"r" long:"region" required:"true" env:"AWS_REGION" description:"AWS Region"`
+	CritDuration time.Duration `short:"c" long:"critical-duration" default:"72h" description:"Critical while duration"`
+	InstanceIds  []string      `short:"i" long:"instance-id" description:"Filter as EC2 Instance Ids"`
 	IsAll        bool          `short:"a" long:"all" description:"Fetch all instances events"`
 	TimeZone     string        `long:"tz" env:"TZ" default:"Asia/Tokyo" description:"TimeZone to create message"`
 	Version      func()        `short:"v" long:"version" description:"Print Build Information"`
