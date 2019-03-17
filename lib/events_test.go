@@ -44,7 +44,7 @@ func createEvents(t *testing.T) EC2Events {
 		{
 			Code:        ec2.EventCodeSystemMaintenance,
 			InstanceId:  "i-07bfa293eacde7019",
-			NotBefore:   ds[0],
+			NotBefore:   ds[0], // Closest Event
 			NotAfter:    ds[1],
 			Description: "[Completed] Scheduled System Maintenance",
 		},
