@@ -5,8 +5,8 @@ import (
 
 	"github.com/mackerelio/checkers"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/k0kubun/pp"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCheckerIsCritical(t *testing.T) {
@@ -44,6 +44,7 @@ func TestCheckerIsWarning(t *testing.T) {
 func TestCheckerIsOk(t *testing.T) {
 	events := EC2Events{}
 	assert.Len(t, events, 0)
+	assert.Zero(t, events.Len())
 
 	c, err := NewChecker([]string{
 		"-r", "us-west-1",
