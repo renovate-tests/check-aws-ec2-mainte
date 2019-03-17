@@ -17,7 +17,7 @@ import (
 var (
 	version    = "indev"
 	commitHash = "123456789abcdef0123456789abcdef012345678" // git rev-parse --verify HEAD
-	buildDate  = "1970-01-01 09:00:00+09:00" // date --rfc-3339=seconds
+	buildDate  = "1970-01-01 09:00:00+09:00"                // date --rfc-3339=seconds
 )
 
 type options struct {
