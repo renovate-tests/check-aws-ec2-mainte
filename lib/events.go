@@ -1,6 +1,8 @@
 package checkawsec2mainte
 
 import (
+	"time"
+
 	"sort"
 	"strings"
 )
@@ -35,6 +37,15 @@ func (self EC2Events) GetCloseEvent() EC2Event {
 	sort.Stable(events)
 
 	return events[0]
+}
+
+func (self EC2Events) BeforeAll(d time.Time) bool {
+	for _, a := range self {
+		if a.NotBefore.After(d) {
+			return false
+		}
+	}
+	return true
 }
 
 func (self EC2Events) Len() int {
