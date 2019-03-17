@@ -81,6 +81,17 @@ func createCases(t *testing.T) []testCaseMainte {
 							},
 						},
 					},
+					{
+						InstanceId: aws.String("i-0dc818ea941b1ae18"),
+						Events: []ec2.InstanceStatusEvent{
+							{
+								Code:        ec2.EventCodeInstanceReboot,
+								Description: aws.String("[Completed] Scheduled Instance Reboot Maintenance"),
+								NotBefore:   aws.Time(ds[0]),
+								NotAfter:    aws.Time(ds[1]),
+							},
+						},
+					},
 				},
 			},
 			Expected: EC2Events{
