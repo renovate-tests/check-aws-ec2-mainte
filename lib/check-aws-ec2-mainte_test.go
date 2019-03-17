@@ -58,7 +58,7 @@ func TestCheckerIsOk(t *testing.T) {
 	assert.Equal(t, checkers.OK, ckr.Status)
 }
 
-func TestOverCheckerIsOk(t *testing.T) {
+func TestOverCheckerIsCritical(t *testing.T) {
 	events := createEvents(t)
 
 	c, err := NewChecker([]string{
@@ -74,5 +74,5 @@ func TestOverCheckerIsOk(t *testing.T) {
 	ckr := c.run(events)
 	pp.Println(ckr)
 
-	assert.Equal(t, checkers.OK, ckr.Status)
+	assert.Equal(t, checkers.CRITICAL, ckr.Status)
 }
