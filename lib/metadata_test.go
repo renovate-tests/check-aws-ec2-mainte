@@ -21,7 +21,7 @@ func initTestServer(path string, resp string) *httptest.Server {
 	}))
 }
 
-func TestGetInstanceId(t *testing.T) {
+func TestGetInstanceIdFromMetadata(t *testing.T) {
 	ast := assert.New(t)
 	expected := "i-09e032cce9ef71d84"
 

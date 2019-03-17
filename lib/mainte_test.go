@@ -11,7 +11,7 @@ import (
 	"github.com/k0kubun/pp"
 )
 
-func TestGetMaintes(t *testing.T) {
+func TestGetMaintesFromAPI(t *testing.T) {
 	cases := createCases(t)
 
 	for _, c := range cases {
