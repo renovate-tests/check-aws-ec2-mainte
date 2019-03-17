@@ -26,12 +26,15 @@ func (e EC2Events) Filter(substr string) EC2Events {
 }
 
 func (self EC2Events) GetCloseEvent() EC2Event {
-	// Sort as NotBefore date
-	// Mutate self
-	sort.Stable(self)
+	// Copy to temporary variable
+	// Prevent to mutate self
+	events := make(EC2Events, cap(self))
+	copy(events, self)
 
-	// return self[len(self)-1]
-	return self[0]
+	// Sort as NotBefore date
+	sort.Stable(events)
+
+	return events[0]
 }
 
 func (self EC2Events) Len() int {

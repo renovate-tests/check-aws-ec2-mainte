@@ -73,7 +73,6 @@ func TestFilterCompleted(t *testing.T) {
 
 func TestGetCloseEvent(t *testing.T){
 	events := createEvents(t) // Contains completed events
-	expected := events[1] // GetCloseEvent() mutate events
 	event := events.GetCloseEvent()
-	assert.Equal(t, expected, event)
+	assert.Equal(t, events[1], event)
 }
