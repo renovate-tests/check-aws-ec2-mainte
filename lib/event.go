@@ -1,11 +1,8 @@
 package checkawsec2mainte
 
 import (
-	"bytes"
-	"log"
-	"text/template"
+	"fmt"
 	"time"
-	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
@@ -23,17 +20,12 @@ func (self EC2Event) IsTimeOver(now time.Time, d time.Duration) bool {
 }
 
 func (self EC2Event) CreateMessage() string {
-	const tplText = "Code: {{.Code}}, InstanceId: {{.InstanceId}}, Date: {{.NotBefore}} - {{.NotAfter}}, Description: {{.Description}}"
-	var buf bytes.Buffer
-
-	tpl, err := template.New("").Parse(strings.Trim(tplText, "\t"))
-	if err != nil {
-		log.Fatal(err)
-		return ""
-	}
-	if err := tpl.Execute(&buf, self); err != nil {
-		log.Fatal(err)
-		return ""
-	}
-	return buf.String()
+	return fmt.Sprintf(
+		"Code: %v, InstanceId: %v, Date: %v - %v, Description: %v",
+		self.Code,
+		self.InstanceId,
+		self.NotBefore.Format(time.RFC3339),
+		self.NotAfter.Format(time.RFC3339),
+		self.Description,
+	)
 }
