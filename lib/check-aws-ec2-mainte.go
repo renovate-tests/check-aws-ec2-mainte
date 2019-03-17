@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/mackerelio/checkers"
@@ -58,9 +59,10 @@ func NewChecker(args []string) (*Checker, error) {
 	opts.Version = func() {
 		fmt.Fprintf(
 			os.Stderr,
-			"Version: %v\nGoVer: %v\nCommitHash: %v\nBuildDate: %v\n",
+			"Version: %v\nGoVer: %v\nAwsSDKVer: %v\nCommitHash: %v\nBuildDate: %v\n",
 			version,
 			runtime.Version(),
+			aws.SDKVersion,
 			commitHash,
 			buildDate,
 		)
