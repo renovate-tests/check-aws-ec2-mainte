@@ -67,7 +67,6 @@ func NewChecker(args []string) (*Checker, error) {
 	}
 
 	_, err := flags.ParseArgs(&opts, args)
-	fmt.Printf("%+v", opts)
 	if err != nil {
 		return nil, err
 	}
