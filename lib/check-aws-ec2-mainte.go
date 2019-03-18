@@ -21,7 +21,7 @@ var (
 	buildDate  = "1970-01-01 09:00:00+09:00"                // date --rfc-3339=seconds
 )
 
-type options struct {
+type Options struct {
 	Region       string        `short:"r" long:"region" required:"true" env:"AWS_REGION" description:"AWS Region"`
 	CritDuration time.Duration `short:"c" long:"critical-duration" default:"72h" description:"Critical while duration"`
 	InstanceIds  []string      `short:"i" long:"instance-id" description:"Filter as EC2 Instance Ids"`
@@ -30,7 +30,7 @@ type options struct {
 }
 
 type Checker struct {
-	Opts options
+	Opts Options
 	Now  time.Time
 }
 
@@ -41,12 +41,12 @@ func Do() {
 		log.Fatal(err)
 	}
 
-	events, err := c.fetchEvents()
+	events, err := c.FetchEvents()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	ckr := c.run(events)
+	ckr := c.Run(events)
 
 	ckr.Name = "EC2 Mainte"
 	ckr.Exit()
@@ -54,7 +54,7 @@ func Do() {
 
 func NewChecker(args []string) (*Checker, error) {
 
-	opts := options{}
+	opts := Options{}
 
 	opts.Version = func() {
 		fmt.Fprintf(
@@ -80,7 +80,7 @@ func NewChecker(args []string) (*Checker, error) {
 	}, nil
 }
 
-func (c Checker) fetchEvents() (EC2Events, error) {
+func (c Checker) FetchEvents() (EC2Events, error) {
 	// The default configuration sources are:
 	// * Environment Variables
 	// * Shared Configuration and Shared Credentials files.
@@ -99,7 +99,7 @@ func (c Checker) fetchEvents() (EC2Events, error) {
 	instanceIds := c.Opts.InstanceIds
 
 	if len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll {
-		instanceId, err := getInstanceIdFromMetadata(cfg)
+		instanceId, err := GetInstanceIdFromMetadata(cfg)
 		if err != nil {
 			return nil, err
 		}
@@ -118,7 +118,7 @@ func (c Checker) fetchEvents() (EC2Events, error) {
 	return events, nil
 }
 
-func (c Checker) run(events EC2Events) *checkers.Checker {
+func (c Checker) Run(events EC2Events) *checkers.Checker {
 	if events.Len() != 0 {
 		event := events.GetCloseEvent()
 

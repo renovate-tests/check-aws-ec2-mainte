@@ -21,7 +21,7 @@ func TestCheckerIsCritical(t *testing.T) {
 	}
 	c.Now = createTime(t, "2019-03-14T12:23:12+09:00")
 
-	ckr := c.run(events)
+	ckr := c.Run(events)
 	assert.Equal(t, checkers.CRITICAL, ckr.Status)
 }
 
@@ -37,7 +37,7 @@ func TestCheckerIsWarning(t *testing.T) {
 	}
 	c.Now = createTime(t, "2019-03-14T12:23:12+09:00")
 
-	ckr := c.run(events)
+	ckr := c.Run(events)
 	assert.Equal(t, checkers.WARNING, ckr.Status)
 }
 
@@ -54,7 +54,7 @@ func TestCheckerIsOk(t *testing.T) {
 	}
 	c.Now = createTime(t, "2019-03-14T12:23:12+09:00")
 
-	ckr := c.run(events)
+	ckr := c.Run(events)
 	assert.Equal(t, checkers.OK, ckr.Status)
 }
 
@@ -71,7 +71,7 @@ func TestOverCheckerIsCritical(t *testing.T) {
 	c.Now = createTime(t, "2019-03-20T12:23:12+09:00")
 	pp.Println(c)
 
-	ckr := c.run(events)
+	ckr := c.Run(events)
 	pp.Println(ckr)
 
 	assert.Equal(t, checkers.CRITICAL, ckr.Status)

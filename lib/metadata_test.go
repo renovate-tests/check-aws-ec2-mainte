@@ -36,7 +36,7 @@ func TestGetInstanceIdFromMetadata(t *testing.T) {
 
 	cfg.EndpointResolver = aws.ResolveWithEndpointURL(server.URL + "/latest")
 
-	actual, err := getInstanceIdFromMetadata(cfg)
+	actual, err := GetInstanceIdFromMetadata(cfg)
 	ast.NoError(err)
 
 	ast.Equal(expected, actual)
