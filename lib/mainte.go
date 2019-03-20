@@ -10,6 +10,7 @@ type EC2Mainte struct {
 	InstanceIds []string
 }
 
+// GetMainteInfo ... Call API and get specified events
 func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
 

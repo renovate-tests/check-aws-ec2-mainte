@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 )
 
+// Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
 func GetInstanceIdFromMetadata(cfg aws.Config) (string, error) {
 	cfg.HTTPClient = &http.Client{
 		Timeout: 100 * time.Millisecond,

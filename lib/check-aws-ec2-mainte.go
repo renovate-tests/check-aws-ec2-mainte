@@ -15,12 +15,14 @@ import (
 	"github.com/jessevdk/go-flags"
 )
 
+// Set variable from -X option
 var (
 	version    = "indev"
 	commitHash = "123456789abcdef0123456789abcdef012345678" // git rev-parse --verify HEAD
 	buildDate  = "1970-01-01 09:00:00+09:00"                // date --rfc-3339=seconds
 )
 
+// Options ... Commandline Options
 type Options struct {
 	Region       string        `short:"r" long:"region" required:"true" env:"AWS_REGION" description:"AWS Region"`
 	CritDuration time.Duration `short:"c" long:"critical-duration" default:"72h" description:"Critical while duration"`
@@ -98,6 +100,7 @@ func (c Checker) FetchEvents() (EC2Events, error) {
 	// If fetch events for all instances, instanceId must empty
 	instanceIds := c.Opts.InstanceIds
 
+	// Get Instance ID from EC2 Metadata
 	if len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll {
 		instanceId, err := GetInstanceIdFromMetadata(cfg)
 		if err != nil {

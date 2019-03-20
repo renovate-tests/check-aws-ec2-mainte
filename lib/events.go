@@ -14,6 +14,7 @@ type IEC2Events interface {
 
 type EC2Events []EC2Event
 
+// Filter ... Filter EC2Events containing substr in Description
 func (e EC2Events) Filter(substr string) EC2Events {
 	events := EC2Events{}
 
@@ -27,6 +28,7 @@ func (e EC2Events) Filter(substr string) EC2Events {
 	return events
 }
 
+// GetCloseEvent ... Get oldest EC2Event
 func (self EC2Events) GetCloseEvent() EC2Event {
 	// Copy to temporary variable
 	// Prevent to mutate self
@@ -39,6 +41,7 @@ func (self EC2Events) GetCloseEvent() EC2Event {
 	return events[0]
 }
 
+// BeforeAll ...
 func (self EC2Events) BeforeAll(d time.Time) bool {
 	for _, a := range self {
 		if a.NotBefore.After(d) {
@@ -48,14 +51,17 @@ func (self EC2Events) BeforeAll(d time.Time) bool {
 	return true
 }
 
+// Len ... Implement sort.Interface
 func (self EC2Events) Len() int {
 	return len(self)
 }
 
+// Less ... Implement sort.Interface
 func (self EC2Events) Less(i, j int) bool {
 	return self[i].NotBefore.Unix() < self[j].NotBefore.Unix()
 }
 
+// Swap ... Implement sort.Interface
 func (self EC2Events) Swap(i, j int) {
 	self[i], self[j] = self[j], self[i]
 }
