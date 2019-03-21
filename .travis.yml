@@ -27,7 +27,7 @@ after_success:
 before_deploy:
   - go get -u github.com/laher/goxc
   - mkdir -p $TRAVIS_BUILD_DIR/dist
-  - goxc -d=$TRAVIS_BUILD_DIR/dist -os="linux darwin windows" -arch=amd64 -build-ldflags="-w -s" -tasks=clean-destination,xc,archive,rmbin
+  - goxc -build-ldflags="-X github.com/ntrv/check-aws-ec2-mainte/lib.version=$(git describe --tags) -X github.com/ntrv/check-aws-ec2-mainte/lib.commitHash=$(git rev-parse --verify HEAD) -X github.com/ntrv/check-aws-ec2-mainte/lib.buildDate=$(date --rfc-3339=seconds)"
 
 deploy:
   provider: releases

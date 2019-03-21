@@ -1,0 +1,39 @@
+{
+  "ConfigVersion": "0.9",
+  "ArtifactsDest": "./dist",
+  "Tasks": [
+    "xc",
+    "copy-resources",
+    "archive",
+    "rmbin"
+  ],
+  "Os": "linux darwin windows",
+  "Arch": "amd64",
+  "Resources": {
+    "Include": "README*,LICENSE*,INSTALL*",
+    "Exclude": "*.go"
+  },
+  "BuildSettings": {
+    "LdFlags": "-w -s",
+    "LdFlagsXVars": {
+      "github.com/ntrv/check-aws-ec2-mainte/lib.version": "test"
+    }
+  },
+  "TaskSettings": {
+    "clean-destination": {},
+    "xc": {
+      "autoRebuildToolchain": false,
+      "validateToolchain": false,
+      "verifyExe": false
+    },
+    "archive-tar-gz": {
+      "include-top-level-dir": "!windows",
+      "platforms": "linux,darwin"
+    },
+    "archive-zip": {
+      "include-top-level-dir": "!windows",
+      "platforms": "!linux,!darwin"
+    },
+    "rmbin": {}
+  }
+}
