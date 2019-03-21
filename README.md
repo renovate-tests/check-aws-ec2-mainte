@@ -8,6 +8,8 @@
 
 ![Go1.12](https://img.shields.io/badge/Go-1.12-blue.svg)
 
+![GitHub](https://img.shields.io/github/license/ntrv/check-aws-ec2-mainte.svg)
+
 ## Usage
 
 ```bash
