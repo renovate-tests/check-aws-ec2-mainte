@@ -1,7 +1,5 @@
 {
   "ConfigVersion": "0.9",
-  "PackageVersion": "indev",
-  "PrereleaseInfo": "",
   "ArtifactsDest": "./dist",
   "Tasks": [
     "clean-destination",
@@ -19,7 +17,6 @@
   "BuildSettings": {
     "LdFlags": "-w -s",
     "LdFlagsXVars": {
-      "Version": "github.com/ntrv/check-aws-ec2-mainte/lib.version",
       "TimeNow": "github.com/ntrv/check-aws-ec2-mainte/lib.buildDate"
     }
   },
