@@ -5,8 +5,10 @@ go:
 env:
   global:
     - GO111MODULE=on
+    - SELF_GOPATH=github.com/ntrv/check-aws-ec2-mainte
 #    - CC_TEST_REPORTER_ID=
 #    - GITHUB_OAUTH_TOKEN=
+
 cache:
   directories:
     - $GOPATH/pkg/mod
@@ -27,7 +29,7 @@ after_success:
 before_deploy:
   - go get -u github.com/laher/goxc
   - mkdir -p $TRAVIS_BUILD_DIR/dist
-  - goxc -build-ldflags="-X github.com/ntrv/check-aws-ec2-mainte/lib.version=$(git describe --tags) -X github.com/ntrv/check-aws-ec2-mainte/lib.commitHash=$(git rev-parse --verify HEAD) -X github.com/ntrv/check-aws-ec2-mainte/lib.buildDate=$(date --rfc-3339=seconds)"
+  - goxc -build-ldflags="-X $SELF_GOPATH/lib.version=$(git describe --tags) -X $SELF_GOPATH/lib.commitHash=$(git rev-parse --verify HEAD)"
 
 deploy:
   provider: releases

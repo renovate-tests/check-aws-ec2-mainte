@@ -16,7 +16,7 @@
   "BuildSettings": {
     "LdFlags": "-w -s",
     "LdFlagsXVars": {
-      "github.com/ntrv/check-aws-ec2-mainte/lib.version": "test"
+      "TimeNow": "github.com/ntrv/check-aws-ec2-mainte/lib.buildDate"
     }
   },
   "TaskSettings": {
