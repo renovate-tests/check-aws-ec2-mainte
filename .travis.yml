@@ -1,12 +1,11 @@
 language: go
-
 go:
   - 1.12
 
 env:
   global:
     - GO111MODULE=on
-
+#    - CC_TEST_REPORTER_ID=
 cache:
   directories:
     - $GOPATH/pkg/mod
