@@ -23,9 +23,6 @@ after_success:
   - ./cc-test-reporter format-coverage cover.profile --input-type gocov
   - ./cc-test-reporter upload-coverage
 
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
 before_deploy:
   - go get -u github.com/laher/goxc
   - mkdir -p $TRAVIS_BUILD_DIR/dist
