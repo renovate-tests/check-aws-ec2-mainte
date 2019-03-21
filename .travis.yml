@@ -4,6 +4,7 @@ go:
   - 1.12
 
 script:
+  - go vet ./...
   - go test -v ./...
   - go build -ldflags '-w -s' .
 
