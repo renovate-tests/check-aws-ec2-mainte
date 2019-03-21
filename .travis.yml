@@ -27,7 +27,7 @@ after_success:
 before_deploy:
   - go get -u github.com/laher/goxc
   - mkdir -p $TRAVIS_BUILD_DIR/dist
-  - goxc -d=$TRAVIS_BUILD_DIR/dist -os="linux darwin windows" -arch=amd64 -tasks=clean-destination,xc,archive,rmbin
+  - goxc -d=$TRAVIS_BUILD_DIR/dist -os="linux darwin windows" -arch=amd64 -build-ldflags="-w -s" -tasks=clean-destination,xc,archive,rmbin
 
 deploy:
   provider: releases
