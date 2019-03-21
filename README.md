@@ -1,6 +1,8 @@
 # check-aws-ec2-mainte
 
-# Usage
+[![](https://travis-ci.org/ntrv/check-aws-ec2-mainte.svg?branch=master)](https://travis-ci.org/ntrv/check-aws-ec2-mainte)
+
+## Usage
 
 ```bash
 $ TZ=Asia/Tokyo AWS_PROFILE=foo AWS_REGION=ap-northeast-1 ./check-aws-ec2-mainte --all
