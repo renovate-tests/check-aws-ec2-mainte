@@ -1,0 +1,13 @@
+language: go
+
+go:
+  - 1.12
+  - 1.11
+
+script:
+  - go test -v ./...
+  - go build -ldflags '-w -s' .
+
+env:
+  global:
+    - GO111MODULE=on
