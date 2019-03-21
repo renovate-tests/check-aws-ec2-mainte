@@ -4,6 +4,8 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/84698652a28fdaf6bf5e/maintainability)](https://codeclimate.com/github/ntrv/check-aws-ec2-mainte/maintainability)
 
+[![Test Coverage](https://api.codeclimate.com/v1/badges/84698652a28fdaf6bf5e/test_coverage)](https://codeclimate.com/github/ntrv/check-aws-ec2-mainte/test_coverage)
+
 ## Usage
 
 ```bash
