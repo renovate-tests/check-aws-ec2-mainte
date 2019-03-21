@@ -11,10 +11,21 @@ cache:
   directories:
     - $GOPATH/pkg/mod
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -o ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
   - go vet ./...
-  - go test -v ./...
-  - go build -ldflags '-w -s' .
+  - go test -cover -v ./lib -coverprofile=cover.profile
+
+after_success:
+  - ./cc-test-reporter format-coverage cover.profile --input-type gocov
+  - ./cc-test-reporter upload-coverage
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 before_deploy:
   - go get -u github.com/laher/goxc
