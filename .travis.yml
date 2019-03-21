@@ -16,3 +16,7 @@ script:
   - go test -v ./...
   - go build -ldflags '-w -s' .
 
+before_deploy:
+  - go get -u github.com/laher/goxc
+  - mkdir -p $TRAVIS_BUILD_DIR/dist
+  - goxc -d=$TRAVIS_BUILD_DIR/dist -bc=darwin -tasks=clean-destination,xc,archive,rmbin
