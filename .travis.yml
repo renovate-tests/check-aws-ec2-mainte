@@ -6,6 +6,7 @@ env:
   global:
     - GO111MODULE=on
 #    - CC_TEST_REPORTER_ID=
+#    - GITHUB_OAUTH_TOKEN=
 cache:
   directories:
     - $GOPATH/pkg/mod
@@ -26,4 +27,15 @@ after_success:
 before_deploy:
   - go get -u github.com/laher/goxc
   - mkdir -p $TRAVIS_BUILD_DIR/dist
-  - goxc -d=$TRAVIS_BUILD_DIR/dist -bc=darwin -tasks=clean-destination,xc,archive,rmbin
+  - goxc -d=$TRAVIS_BUILD_DIR/dist -os="linux darwin windows" -arch=amd64 -tasks=clean-destination,xc,archive,rmbin
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: $GITHUB_OAUTH_TOKEN
+  file_glob: true
+  file: $TRAVIS_BUILD_DIR/dist/**/*.{tar.gz,zip}
+  on:
+    tags: true
+    all_branches: true
+    condition: $TRAVIS_TAG =~ ^v[0-9].*$
