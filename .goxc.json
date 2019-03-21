@@ -2,6 +2,7 @@
   "ConfigVersion": "0.9",
   "ArtifactsDest": "./dist",
   "Tasks": [
+    "clean-destination",
     "xc",
     "copy-resources",
     "archive",
@@ -20,7 +21,6 @@
     }
   },
   "TaskSettings": {
-    "clean-destination": {},
     "xc": {
       "autoRebuildToolchain": false,
       "validateToolchain": false,
@@ -33,7 +33,6 @@
     "archive-zip": {
       "include-top-level-dir": "!windows",
       "platforms": "!linux,!darwin"
-    },
-    "rmbin": {}
+    }
   }
 }
