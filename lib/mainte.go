@@ -20,30 +20,24 @@ func (e EC2Mainte) GetMainteInfo() (events EC2Events, err error) {
 	}
 
 	req := e.Client.DescribeInstanceStatusRequest(options)
-
-	pager := req.Paginate()
-
-	for pager.Next() {
-		page := pager.CurrentPage()
-
-		// Create EC2 Events from InstanceStatusResponse
-		for _, i := range page.InstanceStatuses {
-			if len(i.Events) != 0 {
-				for _, e := range i.Events {
-					events = append(events, EC2Event{
-						Code:        e.Code,
-						InstanceId:  *i.InstanceId,
-						NotAfter:    *e.NotAfter,
-						NotBefore:   *e.NotBefore,
-						Description: *e.Description,
-					})
-				}
-			}
-		}
+	res, err := req.Send()
+	if err != nil {
+		return
 	}
 
-	if err = pager.Err(); err != nil {
-		return
+	// Create EC2 Events from InstanceStatusResponse
+	for _, i := range res.InstanceStatuses {
+		if len(i.Events) != 0 {
+			for _, e := range i.Events {
+				events = append(events, EC2Event{
+					Code:        e.Code,
+					InstanceId:  *i.InstanceId,
+					NotAfter:    *e.NotAfter,
+					NotBefore:   *e.NotBefore,
+					Description: *e.Description,
+				})
+			}
+		}
 	}
 
 	// Remove already completed events
