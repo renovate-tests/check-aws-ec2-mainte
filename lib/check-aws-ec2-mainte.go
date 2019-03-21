@@ -18,7 +18,6 @@ import (
 // Set variable from -X option
 var (
 	version    = "indev"                                    // git describe --tags
-	commitHash = "123456789abcdef0123456789abcdef012345678" // git rev-parse --verify HEAD
 	buildDate  = "1970-01-01 09:00:00+09:00"                // date --rfc-3339=seconds
 )
 
@@ -61,11 +60,10 @@ func NewChecker(args []string) (*Checker, error) {
 	opts.Version = func() {
 		fmt.Fprintf(
 			os.Stderr,
-			"Version: %v\nGoVer: %v\nAwsSDKVer: %v\nCommitHash: %v\nBuildDate: %v\n",
+			"Version: %v\nGoVer: %v\nAwsSDKVer: %v\nBuildDate: %v\n",
 			version,
 			runtime.Version(),
 			aws.SDKVersion,
-			commitHash,
 			buildDate,
 		)
 		os.Exit(1)

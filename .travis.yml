@@ -28,7 +28,7 @@ after_success:
 before_deploy:
   - go get -u github.com/laher/goxc
   - mkdir -p $TRAVIS_BUILD_DIR/dist
-  - goxc -pv=$(git describe --tags) -build-ldflags="-X github.com/ntrv/check-aws-ec2-mainte/lib.commitHash=$(git rev-parse --verify HEAD)"
+  - goxc -pv=$(git describe --tags)
 
 deploy:
   provider: releases
