@@ -28,13 +28,9 @@
       "validateToolchain": false,
       "verifyExe": false
     },
-    "archive-tar-gz": {
-      "include-top-level-dir": "!windows",
-      "platforms": "linux"
-    },
     "archive-zip": {
       "include-top-level-dir": "!windows",
-      "platforms": "!linux,darwin,windows"
+      "platforms": "linux,darwin,windows"
     }
   }
 }
