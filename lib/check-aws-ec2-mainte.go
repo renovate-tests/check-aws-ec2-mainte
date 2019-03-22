@@ -39,7 +39,7 @@ func Do() {
 
 	c, err := NewChecker(os.Args)
 	if err != nil {
-		log.Fatal(err)
+		os.Exit(1)
 	}
 
 	events, err := c.FetchEvents()
