@@ -30,11 +30,11 @@
     },
     "archive-tar-gz": {
       "include-top-level-dir": "!windows",
-      "platforms": "linux,darwin"
+      "platforms": "linux"
     },
     "archive-zip": {
       "include-top-level-dir": "!windows",
-      "platforms": "!linux,!darwin"
+      "platforms": "!linux,darwin,windows"
     }
   }
 }
