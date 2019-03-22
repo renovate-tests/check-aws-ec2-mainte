@@ -18,7 +18,6 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - go vet ./...
   - go test -cover -v ./lib -coverprofile=cover.profile
 
 after_success:
