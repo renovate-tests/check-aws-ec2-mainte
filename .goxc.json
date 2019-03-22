@@ -11,7 +11,7 @@
     "rmbin"
   ],
   "Os": "linux darwin windows",
-  "Arch": "amd64",
+  "Arch": "amd64 386",
   "Resources": {
     "Include": "README*,LICENSE*,INSTALL*",
     "Exclude": "*.go"
