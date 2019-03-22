@@ -18,7 +18,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - go test -cover -v ./lib -coverprofile=cover.profile
+  - make test
 
 after_success:
   - ./cc-test-reporter format-coverage cover.profile --input-type gocov
@@ -26,8 +26,7 @@ after_success:
 
 before_deploy:
   - go get -u github.com/laher/goxc
-  - mkdir -p $TRAVIS_BUILD_DIR/dist
-  - goxc -build-ldflags="-w -s -X github.com/ntrv/check-aws-ec2-mainte/lib.version=$(git describe --tags)"
+  - make build
 
 deploy:
   provider: releases
