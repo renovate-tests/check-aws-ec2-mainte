@@ -3,7 +3,7 @@ default: build
 
 .PHONY: build
 build:
-	goxc -build-ldflags="-w -s -X github.com/ntrv/check-aws-ec2-mainte/lib.version=$(git describe --tags)"
+	goxc -build-ldflags="-w -s -X github.com/ntrv/check-aws-ec2-mainte/lib.version=$(shell git describe --tags)"
 
 .PHONY: test
 test:
