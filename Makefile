@@ -7,4 +7,4 @@ build:
 
 .PHONY: test
 test:
-	go test -v -race -cover -covermode=atomic ./lib -coverprofile=cover.profile
+	go test -v -race -cover -covermode=atomic ./... -coverprofile=cover.profile
