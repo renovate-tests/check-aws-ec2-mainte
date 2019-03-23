@@ -1,6 +1,7 @@
 package checkawsec2mainte_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/k0kubun/pp"
@@ -76,4 +77,31 @@ func TestOverCheckerIsCritical(t *testing.T) {
 	pp.Println(ckr)
 
 	assert.Equal(t, checkers.CRITICAL, ckr.Status)
+}
+
+func TestEventsFromMetadata(t *testing.T) {
+	expectedId := "i-09e032cce9ef71d84"
+	expected := unit.CreateEventsMetadata(t, expectedId)
+
+	data, _ := json.Marshal(expected)
+
+	server := unit.StartTestServer(map[string]string{
+		"/latest/meta-data/instance-id":                  expectedId,
+		"/latest/meta-data/events/maintenance/scheduled": string(data),
+	})
+	defer server.Close()
+
+	c, err := checkawsec2mainte.NewChecker([]string{
+		"-c", "1m",
+		"-r", "us-west-1",
+	})
+	if err != nil {
+		t.Error(err)
+	}
+	c.Now = unit.CreateTime(t, "2019-03-14T12:23:12+09:00")
+
+	ckr := c.Run(expected)
+	pp.Println(ckr)
+
+	assert.Equal(t, checkers.WARNING, ckr.Status)
 }

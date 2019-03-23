@@ -99,13 +99,16 @@ func (c Checker) FetchEvents(ctx context.Context) (EC2Events, error) {
 	// If fetch events for all instances, instanceId must empty
 	instanceIds := c.Opts.InstanceIds
 
-	// Get Instance ID from EC2 Metadata
+	// Get EC2Events from EC2 Metadata
 	if len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll {
-		instanceId, err := GetInstanceIdFromMetadata(cfg)
+		events, err := GetMaintesFromMetadata(cfg)
 		if err != nil {
 			return nil, err
 		}
-		instanceIds = []string{instanceId}
+
+		events = events.Filter(StateCompleted)
+		events = events.Filter(StateCanceled)
+		return events, nil
 	}
 
 	mt := EC2Mainte{
