@@ -13,15 +13,23 @@ Mackerel plugin to detect EC2 Retirement
 
 ## Install
 
+### mkr
+
 ```bash
 mkr plugin install ntrv/check-aws-ec2-mainte
+```
+
+### HomeBrew
+
+```bash
+brew install https://raw.githubusercontent.com/ntrv/check-aws-ec2-mainte/master/Formula/check-aws-ec2-mainte.rb
 ```
 
 
 ## Usage
 
 ```bash
-TZ=Asia/Tokyo AWS_PROFILE=foo AWS_REGION=ap-northeast-1 ./check-aws-ec2-mainte --all
+$ TZ=Asia/Tokyo AWS_PROFILE=foo AWS_REGION=ap-northeast-1 ./check-aws-ec2-mainte --all
 EC2 Mainte WARNING: Code: system-reboot, InstanceId: i-1234abcd, Date: 2019-03-29T21:00:00+09:00 - 2019-03-29T23:00:00+09:00, Description: scheduled reboot
 ```
 
