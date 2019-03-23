@@ -2,6 +2,7 @@ package checkawsec2mainte
 
 import (
 	"testing"
+	"context"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -19,7 +20,7 @@ func TestGetMaintesFromAPI(t *testing.T) {
 			Client:      mockEc2Svc{Resp: c.Resp},
 			InstanceIds: []string{},
 		}
-		events, err := mt.GetMainteInfo()
+		events, err := mt.GetMainteInfo(context.Background())
 		if err != nil {
 			t.Error(err)
 		}

@@ -6,6 +6,7 @@ import (
 	"os"
 	"runtime"
 	"time"
+	"context"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
@@ -36,13 +37,14 @@ type Checker struct {
 }
 
 func Do() {
+	ctx := context.Background()
 
 	c, err := NewChecker(os.Args)
 	if err != nil {
 		os.Exit(1)
 	}
 
-	events, err := c.FetchEvents()
+	events, err := c.FetchEvents(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,7 +82,7 @@ func NewChecker(args []string) (*Checker, error) {
 	}, nil
 }
 
-func (c Checker) FetchEvents() (EC2Events, error) {
+func (c Checker) FetchEvents(ctx context.Context) (EC2Events, error) {
 	// The default configuration sources are:
 	// * Environment Variables
 	// * Shared Configuration and Shared Credentials files.
@@ -112,7 +114,7 @@ func (c Checker) FetchEvents() (EC2Events, error) {
 		InstanceIds: instanceIds,
 	}
 
-	events, err := mt.GetMainteInfo()
+	events, err := mt.GetMainteInfo(ctx)
 	if err != nil {
 		return nil, err
 	}
