@@ -42,10 +42,10 @@ type mockEc2Svc struct {
 }
 
 func (m mockEc2Svc) DescribeInstanceStatusRequest(input *ec2.DescribeInstanceStatusInput) ec2.DescribeInstanceStatusRequest {
+	r := NewAwsMockRequest(&m.Resp)
+
 	return ec2.DescribeInstanceStatusRequest{
-		Request: &aws.Request{
-			Data: &m.Resp,
-		},
+		Request: r,
 	}
 }
 
