@@ -1,9 +1,9 @@
 package checkawsec2mainte
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
-	"encoding/json"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
@@ -41,7 +41,7 @@ func GetMaintesFromMetadata(cfg aws.Config) (events EC2Events, err error) {
 	if err = json.Unmarshal([]byte(data), &events); err != nil {
 		return
 	}
-	
+
 	instanceId, err := GetInstanceIdFromMetadata(cfg)
 	if err != nil {
 		return
