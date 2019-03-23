@@ -7,7 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
-	"github.com/ntrv/check-aws-ec2-mainte/lib"
+	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/stretchr/testify/assert"
 )
 

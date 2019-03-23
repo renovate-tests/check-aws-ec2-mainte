@@ -1,11 +1,11 @@
 package unit
 
-import(
+import (
 	"testing"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/ntrv/check-aws-ec2-mainte/lib"
+	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 )
 
 func CreateTime(t *testing.T, value string) time.Time {
@@ -62,4 +62,3 @@ func CreateEvents(t *testing.T) checkawsec2mainte.EC2Events {
 		},
 	}
 }
-

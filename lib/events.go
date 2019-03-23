@@ -1,10 +1,9 @@
 package checkawsec2mainte
 
 import (
-	"time"
-
 	"sort"
 	"strings"
+	"time"
 )
 
 type IEC2Events interface {

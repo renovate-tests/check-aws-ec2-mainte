@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ntrv/check-aws-ec2-mainte/lib"
+	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/stretchr/testify/assert"
 )
 

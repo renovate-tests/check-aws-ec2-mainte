@@ -11,9 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/mackerelio/checkers"
-
 	"github.com/jessevdk/go-flags"
+	"github.com/mackerelio/checkers"
 )
 
 // Set variable from -X option

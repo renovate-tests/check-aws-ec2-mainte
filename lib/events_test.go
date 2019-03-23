@@ -3,11 +3,10 @@ package checkawsec2mainte_test
 import (
 	"testing"
 
-	"github.com/ntrv/check-aws-ec2-mainte/lib"
+	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/ntrv/check-aws-ec2-mainte/lib/unit"
 	"github.com/stretchr/testify/assert"
 )
-
 
 func TestFilterCompleted(t *testing.T) {
 	events := unit.CreateEvents(t)
