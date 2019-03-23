@@ -9,11 +9,11 @@ import (
 
 // EC2Event ... Almost same as ec2.InstanceStatusEvent
 type EC2Event struct {
-	Code        ec2.EventCode
-	InstanceId  string
-	NotBefore   time.Time
-	NotAfter    time.Time
-	Description string
+	Code        ec2.EventCode `json:"Code"`
+	InstanceId  string        `json:"-"`
+	NotBefore   time.Time     `json:"NotBefore"`
+	NotAfter    time.Time     `json:"NotAfter"`
+	Description string        `json:"Description"`
 }
 
 // IsTimeOver ... EC2Eventが引数より新しいかどうか
