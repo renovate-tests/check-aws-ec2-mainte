@@ -16,12 +16,10 @@ func GetInstanceIdFromMetadata(cfg aws.Config) (string, error) {
 	}
 
 	m := ec2metadata.New(cfg)
-
 	id, err := m.GetMetadata("instance-id")
 	if err != nil {
 		return "", err
 	}
-
 	return id, nil
 }
 
@@ -32,12 +30,10 @@ func GetMaintesFromMetadata(cfg aws.Config) (events EC2Events, err error) {
 	}
 
 	m := ec2metadata.New(cfg)
-
 	data, err := m.GetMetadata("events/maintenance/scheduled")
 	if err != nil {
 		return
 	}
-
 	if err = json.Unmarshal([]byte(data), &events); err != nil {
 		return
 	}
@@ -46,7 +42,6 @@ func GetMaintesFromMetadata(cfg aws.Config) (events EC2Events, err error) {
 	if err != nil {
 		return
 	}
-
 	for i, _ := range events {
 		events[i].InstanceId = instanceId
 	}

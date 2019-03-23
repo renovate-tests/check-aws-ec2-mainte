@@ -24,14 +24,12 @@ func TestGetInstanceIdFromMetadata(t *testing.T) {
 	if err != nil {
 		t.Error(err.Error())
 	}
-
 	cfg.EndpointResolver = aws.ResolveWithEndpointURL(server.URL + "/latest")
 
 	actual, err := checkawsec2mainte.GetInstanceIdFromMetadata(cfg)
 	if err != nil {
 		t.Error(err.Error())
 	}
-
 	assert.Equal(t, expected, actual)
 }
 
@@ -51,7 +49,6 @@ func TestMaintesFromMetadata(t *testing.T) {
 	if err != nil {
 		t.Error(err.Error())
 	}
-
 	cfg.EndpointResolver = aws.ResolveWithEndpointURL(server.URL + "/latest")
 
 	actual, err := checkawsec2mainte.GetMaintesFromMetadata(cfg)
