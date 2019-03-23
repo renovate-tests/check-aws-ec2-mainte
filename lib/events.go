@@ -14,25 +14,25 @@ type IEC2Events interface {
 type EC2Events []EC2Event
 
 // Filter ... Filter EC2Events containing substr in Description
-func (e EC2Events) Filter(substr string) EC2Events {
+func (evs EC2Events) Filter(substr string) EC2Events {
 	events := EC2Events{}
 
-	for _, event := range e {
-		if strings.Contains(event.Description, substr) {
+	for _, ev := range evs {
+		if strings.Contains(ev.Description, substr) {
 			continue
 		}
-		events = append(events, event)
+		events = append(events, ev)
 	}
 
 	return events
 }
 
 // GetCloseEvent ... Get oldest EC2Event
-func (self EC2Events) GetCloseEvent() EC2Event {
+func (evs EC2Events) GetCloseEvent() EC2Event {
 	// Copy to temporary variable
 	// Prevent to mutate self
-	events := make(EC2Events, cap(self))
-	copy(events, self)
+	events := make(EC2Events, cap(evs))
+	copy(events, evs)
 
 	// Sort as NotBefore date
 	sort.Stable(events)
@@ -41,9 +41,9 @@ func (self EC2Events) GetCloseEvent() EC2Event {
 }
 
 // BeforeAll ...
-func (self EC2Events) BeforeAll(d time.Time) bool {
-	for _, a := range self {
-		if a.NotBefore.After(d) {
+func (evs EC2Events) BeforeAll(d time.Time) bool {
+	for _, ev := range evs {
+		if ev.NotBefore.After(d) {
 			return false
 		}
 	}
@@ -51,16 +51,16 @@ func (self EC2Events) BeforeAll(d time.Time) bool {
 }
 
 // Len ... Implement sort.Interface
-func (self EC2Events) Len() int {
-	return len(self)
+func (evs EC2Events) Len() int {
+	return len(evs)
 }
 
 // Less ... Implement sort.Interface
-func (self EC2Events) Less(i, j int) bool {
-	return self[i].NotBefore.Unix() < self[j].NotBefore.Unix()
+func (evs EC2Events) Less(i, j int) bool {
+	return evs[i].NotBefore.Unix() < evs[j].NotBefore.Unix()
 }
 
 // Swap ... Implement sort.Interface
-func (self EC2Events) Swap(i, j int) {
-	self[i], self[j] = self[j], self[i]
+func (evs EC2Events) Swap(i, j int) {
+	evs[i], evs[j] = evs[j], evs[i]
 }

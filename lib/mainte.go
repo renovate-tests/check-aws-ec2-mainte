@@ -13,15 +13,15 @@ type EC2Mainte struct {
 }
 
 // GetMainteInfo ... Call API and get specified events
-func (e EC2Mainte) GetMainteInfo(ctx context.Context) (events EC2Events, err error) {
+func (mt EC2Mainte) GetMainteInfo(ctx context.Context) (events EC2Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
 
 	// If InstanceIds is empty, get all EC2 Events
-	if len(e.InstanceIds) != 0 {
-		options.InstanceIds = e.InstanceIds
+	if len(mt.InstanceIds) != 0 {
+		options.InstanceIds = mt.InstanceIds
 	}
 
-	req := e.Client.DescribeInstanceStatusRequest(options)
+	req := mt.Client.DescribeInstanceStatusRequest(options)
 	req.SetContext(ctx)
 	res, err := req.Send()
 	if err != nil {
@@ -29,15 +29,15 @@ func (e EC2Mainte) GetMainteInfo(ctx context.Context) (events EC2Events, err err
 	}
 
 	// Create EC2 Events from InstanceStatusResponse
-	for _, i := range res.InstanceStatuses {
-		if len(i.Events) != 0 {
-			for _, e := range i.Events {
+	for _, instance := range res.InstanceStatuses {
+		if len(instance.Events) != 0 {
+			for _, ev := range instance.Events {
 				events = append(events, EC2Event{
-					Code:        e.Code,
-					InstanceId:  *i.InstanceId,
-					NotAfter:    *e.NotAfter,
-					NotBefore:   *e.NotBefore,
-					Description: *e.Description,
+					Code:        ev.Code,
+					InstanceId:  *instance.InstanceId,
+					NotAfter:    *ev.NotAfter,
+					NotBefore:   *ev.NotBefore,
+					Description: *ev.Description,
 				})
 			}
 		}

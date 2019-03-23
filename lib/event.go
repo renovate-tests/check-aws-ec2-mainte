@@ -17,19 +17,19 @@ type EC2Event struct {
 }
 
 // IsTimeOver ... EC2Eventが引数より新しいかどうか
-func (self EC2Event) IsTimeOver(now time.Time, d time.Duration) bool {
-	return now.Add(d).After(self.NotBefore)
+func (ev EC2Event) IsTimeOver(now time.Time, d time.Duration) bool {
+	return now.Add(d).After(ev.NotBefore)
 }
 
 // CreateMessage ... Information for displaying to Mackerel
-func (self EC2Event) CreateMessage() string {
+func (ev EC2Event) CreateMessage() string {
 	// Load Location from $TZ or /etc/localtime
 	return fmt.Sprintf(
 		"Code: %v, InstanceId: %v, Date: %v - %v, Description: %v",
-		self.Code,
-		self.InstanceId,
-		self.NotBefore.In(time.Local).Format(time.RFC3339),
-		self.NotAfter.In(time.Local).Format(time.RFC3339),
-		self.Description,
+		ev.Code,
+		ev.InstanceId,
+		ev.NotBefore.In(time.Local).Format(time.RFC3339),
+		ev.NotAfter.In(time.Local).Format(time.RFC3339),
+		ev.Description,
 	)
 }
