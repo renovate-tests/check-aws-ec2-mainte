@@ -1,4 +1,4 @@
-package checkawsec2mainte_test
+package unit
 
 import (
 	"bytes"

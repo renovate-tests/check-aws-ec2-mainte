@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 	"github.com/ntrv/check-aws-ec2-mainte/lib"
+	"github.com/ntrv/check-aws-ec2-mainte/lib/unit"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/k0kubun/pp"
@@ -43,7 +44,7 @@ type mockEc2Svc struct {
 }
 
 func (m mockEc2Svc) DescribeInstanceStatusRequest(input *ec2.DescribeInstanceStatusInput) ec2.DescribeInstanceStatusRequest {
-	r := NewAwsMockRequest(&m.Resp)
+	r := unit.NewAwsMockRequest(&m.Resp)
 
 	return ec2.DescribeInstanceStatusRequest{
 		Request: r,
@@ -51,7 +52,7 @@ func (m mockEc2Svc) DescribeInstanceStatusRequest(input *ec2.DescribeInstanceSta
 }
 
 func createCases(t *testing.T) []testCaseMainte {
-	ds := createTimes(t, []string{
+	ds := unit.CreateTimes(t, []string{
 		"2019-03-14T16:04:05+09:00",
 		"2019-03-16T16:04:05+09:00",
 		"2019-03-16T18:04:05+09:00",

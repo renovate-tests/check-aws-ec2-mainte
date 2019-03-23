@@ -5,13 +5,14 @@ import (
 
 	"github.com/mackerelio/checkers"
 	"github.com/ntrv/check-aws-ec2-mainte/lib"
+	"github.com/ntrv/check-aws-ec2-mainte/lib/unit"
 
 	"github.com/k0kubun/pp"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCheckerIsCritical(t *testing.T) {
-	events := createEvents(t)
+	events := unit.CreateEvents(t)
 
 	c, err := checkawsec2mainte.NewChecker([]string{
 		"-c", "1000h",
@@ -20,14 +21,14 @@ func TestCheckerIsCritical(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	c.Now = createTime(t, "2019-03-14T12:23:12+09:00")
+	c.Now = unit.CreateTime(t, "2019-03-14T12:23:12+09:00")
 
 	ckr := c.Run(events)
 	assert.Equal(t, checkers.CRITICAL, ckr.Status)
 }
 
 func TestCheckerIsWarning(t *testing.T) {
-	events := createEvents(t)
+	events := unit.CreateEvents(t)
 
 	c, err := checkawsec2mainte.NewChecker([]string{
 		"-c", "1m",
@@ -36,7 +37,7 @@ func TestCheckerIsWarning(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	c.Now = createTime(t, "2019-03-14T12:23:12+09:00")
+	c.Now = unit.CreateTime(t, "2019-03-14T12:23:12+09:00")
 
 	ckr := c.Run(events)
 	assert.Equal(t, checkers.WARNING, ckr.Status)
@@ -53,14 +54,14 @@ func TestCheckerIsOk(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	c.Now = createTime(t, "2019-03-14T12:23:12+09:00")
+	c.Now = unit.CreateTime(t, "2019-03-14T12:23:12+09:00")
 
 	ckr := c.Run(events)
 	assert.Equal(t, checkers.OK, ckr.Status)
 }
 
 func TestOverCheckerIsCritical(t *testing.T) {
-	events := createEvents(t)
+	events := unit.CreateEvents(t)
 
 	c, err := checkawsec2mainte.NewChecker([]string{
 		"-c", "1m",
@@ -69,7 +70,7 @@ func TestOverCheckerIsCritical(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	c.Now = createTime(t, "2019-03-20T12:23:12+09:00")
+	c.Now = unit.CreateTime(t, "2019-03-20T12:23:12+09:00")
 	pp.Println(c)
 
 	ckr := c.Run(events)
