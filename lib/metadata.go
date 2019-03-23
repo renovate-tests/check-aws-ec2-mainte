@@ -47,8 +47,8 @@ func GetMaintesFromMetadata(cfg aws.Config) (events EC2Events, err error) {
 		return
 	}
 
-	for _, event := range events {
-		event.InstanceId = instanceId
+	for i, _ := range events {
+		events[i].InstanceId = instanceId
 	}
 	return
 }
