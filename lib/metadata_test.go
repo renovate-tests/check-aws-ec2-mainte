@@ -11,14 +11,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func initTestServer(path string, resp string) *httptest.Server {
+func initTestServer(patterns map[string]string) *httptest.Server {
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.RequestURI != path {
-			http.Error(w, "not found", http.StatusNotFound)
+		if resp, ok := patterns[r.RequestURI]; ok {
+			w.Write([]byte(resp))
 			return
 		}
 
-		w.Write([]byte(resp))
+		http.Error(w, "not found", http.StatusNotFound)
+		return
 	}))
 }
 
@@ -26,10 +27,9 @@ func TestGetInstanceIdFromMetadata(t *testing.T) {
 	ast := assert.New(t)
 	expected := "i-09e032cce9ef71d84"
 
-	server := initTestServer(
-		"/latest/meta-data/instance-id",
-		expected,
-	)
+	server := initTestServer(map[string]string{
+		"/latest/meta-data/instance-id": expected,
+	})
 	defer server.Close()
 
 	cfg, err := external.LoadDefaultAWSConfig()
