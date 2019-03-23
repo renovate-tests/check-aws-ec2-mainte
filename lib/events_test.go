@@ -1,10 +1,11 @@
-package checkawsec2mainte
+package checkawsec2mainte_test
 
 import (
 	"testing"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,7 +24,7 @@ func createTimes(t *testing.T, values []string) (ds []time.Time) {
 	return
 }
 
-func createEvents(t *testing.T) EC2Events {
+func createEvents(t *testing.T) checkawsec2mainte.EC2Events {
 
 	ds := createTimes(t, []string{
 		"2019-03-14T16:04:05+09:00",
@@ -34,7 +35,7 @@ func createEvents(t *testing.T) EC2Events {
 		"2019-03-17T18:04:05+07:00",
 	})
 
-	return EC2Events{
+	return checkawsec2mainte.EC2Events{
 		{
 			Code:        ec2.EventCodeSystemReboot,
 			InstanceId:  "i-9263d590",
@@ -88,7 +89,7 @@ func TestBeforeAllisOk(t *testing.T) {
 
 	now := createTime(t, "2019-03-20T19:00:00+09:00") // Future
 
-	events := EC2Events{
+	events := checkawsec2mainte.EC2Events{
 		{
 			NotBefore: ds[0],
 		},
@@ -120,7 +121,7 @@ func TestBeforeAllisNotOk(t *testing.T) {
 
 	now := createTime(t, "2019-03-16T19:00:00+09:00") // intermediate
 
-	events := EC2Events{
+	events := checkawsec2mainte.EC2Events{
 		{
 			NotBefore: ds[0],
 		},

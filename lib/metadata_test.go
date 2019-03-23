@@ -1,4 +1,4 @@
-package checkawsec2mainte
+package checkawsec2mainte_test
 
 import (
 	"net/http"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,7 +37,7 @@ func TestGetInstanceIdFromMetadata(t *testing.T) {
 
 	cfg.EndpointResolver = aws.ResolveWithEndpointURL(server.URL + "/latest")
 
-	actual, err := GetInstanceIdFromMetadata(cfg)
+	actual, err := checkawsec2mainte.GetInstanceIdFromMetadata(cfg)
 	ast.NoError(err)
 
 	ast.Equal(expected, actual)

@@ -1,4 +1,4 @@
-package checkawsec2mainte
+package checkawsec2mainte_test
 
 import (
 	"bytes"
@@ -24,10 +24,10 @@ func newMockConfig() aws.Config {
 	config.EndpointResolver = aws.ResolveWithEndpointURL("https://endpoint")
 	config.Credentials = aws.StaticCredentialsProvider{
 		Value: aws.Credentials{
-			AccessKeyID: "AKID",
+			AccessKeyID:     "AKID",
 			SecretAccessKey: "SECRET",
-			SessionToken: "SESSION",
-			Source: "unit test credentials",
+			SessionToken:    "SESSION",
+			Source:          "unit test credentials",
 		},
 	}
 	return config.Copy()

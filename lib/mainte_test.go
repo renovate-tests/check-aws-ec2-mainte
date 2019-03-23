@@ -1,12 +1,13 @@
-package checkawsec2mainte
+package checkawsec2mainte_test
 
 import (
-	"testing"
 	"context"
+	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
+	"github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/k0kubun/pp"
@@ -16,7 +17,7 @@ func TestGetMaintesFromAPI(t *testing.T) {
 	cases := createCases(t)
 
 	for _, c := range cases {
-		mt := EC2Mainte{
+		mt := checkawsec2mainte.EC2Mainte{
 			Client:      mockEc2Svc{Resp: c.Resp},
 			InstanceIds: []string{},
 		}
@@ -33,7 +34,7 @@ func TestGetMaintesFromAPI(t *testing.T) {
 
 type testCaseMainte struct {
 	Resp     ec2.DescribeInstanceStatusOutput
-	Expected EC2Events
+	Expected checkawsec2mainte.EC2Events
 }
 
 type mockEc2Svc struct {
@@ -95,7 +96,7 @@ func createCases(t *testing.T) []testCaseMainte {
 					},
 				},
 			},
-			Expected: EC2Events{
+			Expected: checkawsec2mainte.EC2Events{
 				{
 					Code:        ec2.EventCodeSystemMaintenance,
 					InstanceId:  "i-0472b8a82f226da14",

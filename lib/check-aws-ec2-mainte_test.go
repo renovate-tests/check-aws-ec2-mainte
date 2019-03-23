@@ -1,9 +1,10 @@
-package checkawsec2mainte
+package checkawsec2mainte_test
 
 import (
 	"testing"
 
 	"github.com/mackerelio/checkers"
+	"github.com/ntrv/check-aws-ec2-mainte/lib"
 
 	"github.com/k0kubun/pp"
 	"github.com/stretchr/testify/assert"
@@ -12,7 +13,7 @@ import (
 func TestCheckerIsCritical(t *testing.T) {
 	events := createEvents(t)
 
-	c, err := NewChecker([]string{
+	c, err := checkawsec2mainte.NewChecker([]string{
 		"-c", "1000h",
 		"-r", "us-west-1",
 	})
@@ -28,7 +29,7 @@ func TestCheckerIsCritical(t *testing.T) {
 func TestCheckerIsWarning(t *testing.T) {
 	events := createEvents(t)
 
-	c, err := NewChecker([]string{
+	c, err := checkawsec2mainte.NewChecker([]string{
 		"-c", "1m",
 		"-r", "us-west-1",
 	})
@@ -42,11 +43,11 @@ func TestCheckerIsWarning(t *testing.T) {
 }
 
 func TestCheckerIsOk(t *testing.T) {
-	events := EC2Events{}
+	events := checkawsec2mainte.EC2Events{}
 	assert.Len(t, events, 0)
 	assert.Zero(t, events.Len())
 
-	c, err := NewChecker([]string{
+	c, err := checkawsec2mainte.NewChecker([]string{
 		"-r", "us-west-1",
 	})
 	if err != nil {
@@ -61,7 +62,7 @@ func TestCheckerIsOk(t *testing.T) {
 func TestOverCheckerIsCritical(t *testing.T) {
 	events := createEvents(t)
 
-	c, err := NewChecker([]string{
+	c, err := checkawsec2mainte.NewChecker([]string{
 		"-c", "1m",
 		"-r", "us-west-1",
 	})
