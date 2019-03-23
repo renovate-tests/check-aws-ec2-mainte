@@ -7,6 +7,14 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
 
+type EC2EventState string
+
+const (
+	StateActive    EC2EventState = "active"
+	StateCompleted EC2EventState = "completed"
+	StateCanceled  EC2EventState = "canceled"
+)
+
 // EC2Event ... Almost same as ec2.InstanceStatusEvent
 type EC2Event struct {
 	Code        ec2.EventCode `json:"Code"`
@@ -14,6 +22,7 @@ type EC2Event struct {
 	NotBefore   time.Time     `json:"NotBefore"`
 	NotAfter    time.Time     `json:"NotAfter"`
 	Description string        `json:"Description"`
+	State       EC2EventState `json:"State"`
 }
 
 // IsTimeOver ... EC2Eventが引数より新しいかどうか

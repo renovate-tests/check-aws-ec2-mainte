@@ -66,6 +66,7 @@ func CreateCases(t *testing.T) []testCaseMainte {
 					Description: "Scheduled System Maintenance",
 					NotBefore:   ds[0],
 					NotAfter:    ds[1],
+					State:       checkawsec2mainte.StateActive,
 				},
 				{
 					Code:        ec2.EventCodeInstanceRetirement,
@@ -73,6 +74,7 @@ func CreateCases(t *testing.T) []testCaseMainte {
 					Description: "Scheduled Instance Retirement Maintenance",
 					NotBefore:   ds[2],
 					NotAfter:    ds[2], //TODO: Check this field is required
+					State:       checkawsec2mainte.StateActive,
 				},
 			},
 		},

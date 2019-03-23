@@ -39,6 +39,7 @@ func CreateEvents(t *testing.T) checkawsec2mainte.EC2Events {
 			InstanceId:  "i-9263d590",
 			NotBefore:   ds[2],
 			Description: "scheduled reboot",
+			State:       checkawsec2mainte.StateActive,
 		},
 		{
 			Code:        ec2.EventCodeSystemMaintenance,
@@ -46,12 +47,14 @@ func CreateEvents(t *testing.T) checkawsec2mainte.EC2Events {
 			NotBefore:   ds[0], // Closest Event
 			NotAfter:    ds[1],
 			Description: "[Completed] Scheduled System Maintenance",
+			State:       checkawsec2mainte.StateCompleted,
 		},
 		{
 			Code:        ec2.EventCodeInstanceRetirement,
 			InstanceId:  "i-05d9be9a",
 			NotBefore:   ds[5],
 			Description: "[Completed] Scheduled Instance Retirement Maintenance",
+			State:       checkawsec2mainte.StateCompleted,
 		},
 		{
 			Code:        ec2.EventCodeInstanceReboot,
@@ -59,6 +62,7 @@ func CreateEvents(t *testing.T) checkawsec2mainte.EC2Events {
 			NotBefore:   ds[3],
 			NotAfter:    ds[4],
 			Description: "Scheduled Instance Reboot Maintenance",
+			State:       checkawsec2mainte.StateActive,
 		},
 	}
 }

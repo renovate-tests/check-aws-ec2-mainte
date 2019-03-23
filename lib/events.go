@@ -14,17 +14,31 @@ type IEC2Events interface {
 type EC2Events []EC2Event
 
 // Filter ... Filter EC2Events containing substr in Description
-func (evs EC2Events) Filter(substr string) EC2Events {
+func (evs EC2Events) Filter(state EC2EventState) EC2Events {
 	events := EC2Events{}
 
 	for _, ev := range evs {
-		if strings.Contains(ev.Description, substr) {
+		if ev.State == state {
 			continue
 		}
 		events = append(events, ev)
 	}
-
 	return events
+}
+
+// UpdateStates ... Descriptionに含まれている文字列からStateを設定
+func (evs EC2Events) UpdateStates() {
+	for i, ev := range evs {
+		if strings.Contains(ev.Description, "[Completed]") {
+			evs[i].State = StateCompleted
+			continue
+		}
+		if strings.Contains(ev.Description, "[Canceled]") {
+			evs[i].State = StateCanceled
+			continue
+		}
+		evs[i].State = StateActive
+	}
 }
 
 // GetCloseEvent ... Get oldest EC2Event

@@ -11,7 +11,7 @@ import (
 func TestFilterCompleted(t *testing.T) {
 	events := unit.CreateEvents(t)
 
-	events = events.Filter("Completed")
+	events = events.Filter(checkawsec2mainte.StateCompleted)
 	assert.Len(t, events, 2)
 }
 

@@ -40,6 +40,7 @@ func TestGetMaintesFromAPI(t *testing.T) {
 
 		pp.Println(events)
 
+		assert.Len(t, events, c.Expected.Len())
 		assert.Equal(t, c.Expected, events)
 	}
 }
