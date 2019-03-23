@@ -1,12 +1,12 @@
 package checkawsec2mainte
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
 	"runtime"
 	"time"
-	"context"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
@@ -18,8 +18,8 @@ import (
 
 // Set variable from -X option
 var (
-	version    = "indev"                                    // git describe --tags
-	buildDate  = "1970-01-01 09:00:00+09:00"                // date --rfc-3339=seconds
+	version   = "indev"                     // git describe --tags
+	buildDate = "1970-01-01 09:00:00+09:00" // date --rfc-3339=seconds
 )
 
 // Options ... Commandline Options
