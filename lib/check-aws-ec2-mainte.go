@@ -56,7 +56,6 @@ func Do() {
 }
 
 func NewChecker(args []string) (*Checker, error) {
-
 	opts := Options{}
 
 	opts.Version = func() {
@@ -82,51 +81,25 @@ func NewChecker(args []string) (*Checker, error) {
 	}, nil
 }
 
-func (c Checker) FetchEvents(ctx context.Context) (EC2Events, error) {
+func (c Checker) FetchEvents(ctx context.Context) (events EC2Events, err error) {
 	// The default configuration sources are:
 	// * Environment Variables
 	// * Shared Configuration and Shared Credentials files.
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	// Set Region from --region
-	if c.Opts.Region != "" {
-		cfg.Region = c.Opts.Region
+	switch {
+	case c.Opts.Region == "":
+		events, err = c.FetchEC2MetaMainteEvents(ctx, cfg)
+	case len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll:
+		events, err = c.FetchEC2MetaMainteEvents(ctx, cfg)
+	default: // len(c.Opts.InstanceIds) != 0 || c.Opts.IsAll
+		cfg.Region = c.Opts.Region // Set Region from --region
+		events, err = c.FetchEC2MainteEvents(ctx, cfg)
 	}
-
-	// Default instanceId is from EC2 metadata
-	// If fetch events for all instances, instanceId must empty
-	instanceIds := c.Opts.InstanceIds
-
-	// Get EC2Events from EC2 Metadata
-	// If Region or Instance ID is empty or not --all specified
-	if (len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll) || c.Opts.Region == "" {
-		mt := EC2MetaMainte{
-			Client: ec2metadata.New(cfg),
-		}
-
-		events, err := mt.GetMaintes(ctx)
-		if err != nil {
-			return nil, err
-		}
-
-		events = events.Filter(StateCompleted, StateCanceled)
-		return events, nil
-	}
-
-	mt := EC2Mainte{
-		Client:      ec2.New(cfg),
-		InstanceIds: instanceIds,
-	}
-
-	events, err := mt.GetMainteInfo(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return events, nil
+	return
 }
 
 func (c Checker) Run(events EC2Events) *checkers.Checker {
@@ -140,4 +113,34 @@ func (c Checker) Run(events EC2Events) *checkers.Checker {
 	}
 
 	return checkers.Ok("Not coming EC2 instance events")
+}
+
+// Get EC2Events from Real EC2 API
+func (c Checker) FetchEC2MainteEvents(ctx context.Context, cfg aws.Config) (EC2Events, error) {
+	mt := EC2Mainte{
+		Client:      ec2.New(cfg),
+		InstanceIds: c.Opts.InstanceIds, // If fetch events for all instances, instanceId must empty
+	}
+
+	events, err := mt.GetMainteInfo(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return events, nil
+}
+
+// Get EC2Events from EC2 Metadata
+// If Region or Instance ID is empty or not --all specified
+func (_ Checker) FetchEC2MetaMainteEvents(ctx context.Context, cfg aws.Config) (EC2Events, error) {
+	mt := EC2MetaMainte{
+		Client: ec2metadata.New(cfg),
+	}
+
+	events, err := mt.GetMaintes(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	events = events.Filter(StateCompleted, StateCanceled)
+	return events, nil
 }
