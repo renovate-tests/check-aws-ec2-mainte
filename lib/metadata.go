@@ -1,22 +1,22 @@
 package checkawsec2mainte
 
 import (
+	"context"
 	"encoding/json"
-	"net/http"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 )
 
-// Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
-func GetInstanceIdFromMetadata(cfg aws.Config) (string, error) {
-	cfg.HTTPClient = &http.Client{
-		Timeout: 100 * time.Millisecond,
-	}
+type EC2MetaMainte struct {
+	Client *ec2metadata.EC2Metadata
+}
 
-	m := ec2metadata.New(cfg)
-	id, err := m.GetMetadata("instance-id")
+// Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
+func (mm *EC2MetaMainte) GetInstanceId(ctx context.Context) (string, error) {
+	mm.Client.Config.HTTPClient.Timeout = 100 * time.Millisecond
+
+	id, err := mm.Client.GetMetadata("instance-id")
 	if err != nil {
 		return "", err
 	}
@@ -24,13 +24,10 @@ func GetInstanceIdFromMetadata(cfg aws.Config) (string, error) {
 }
 
 // GetMaintesFromMetadata ... Get Scheduled Maintenances
-func GetMaintesFromMetadata(cfg aws.Config) (events EC2Events, err error) {
-	cfg.HTTPClient = &http.Client{
-		Timeout: 100 * time.Millisecond,
-	}
+func (mm *EC2MetaMainte) GetMaintes(ctx context.Context) (events EC2Events, err error) {
+	mm.Client.Config.HTTPClient.Timeout = 100 * time.Millisecond
 
-	m := ec2metadata.New(cfg)
-	data, err := m.GetMetadata("events/maintenance/scheduled")
+	data, err := mm.Client.GetMetadata("events/maintenance/scheduled")
 	if err != nil {
 		return
 	}
@@ -38,7 +35,7 @@ func GetMaintesFromMetadata(cfg aws.Config) (events EC2Events, err error) {
 		return
 	}
 
-	instanceId, err := GetInstanceIdFromMetadata(cfg)
+	instanceId, err := mm.GetInstanceId(ctx)
 	if err != nil {
 		return
 	}

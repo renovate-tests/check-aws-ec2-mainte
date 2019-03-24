@@ -1,16 +1,27 @@
 package checkawsec2mainte_test
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/k0kubun/pp"
 	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/ntrv/check-aws-ec2-mainte/lib/unit"
 	"github.com/stretchr/testify/assert"
 )
+
+func initMetaConfig(t *testing.T, endpoint string) aws.Config {
+	cfg, err := external.LoadDefaultAWSConfig()
+	if err != nil {
+		t.Error(err.Error())
+	}
+	cfg.EndpointResolver = aws.ResolveWithEndpointURL(endpoint + "/latest")
+	return cfg
+}
 
 func TestGetInstanceIdFromMetadata(t *testing.T) {
 	expected := "i-09e032cce9ef71d84"
@@ -20,13 +31,11 @@ func TestGetInstanceIdFromMetadata(t *testing.T) {
 	})
 	defer server.Close()
 
-	cfg, err := external.LoadDefaultAWSConfig()
-	if err != nil {
-		t.Error(err.Error())
+	mt := checkawsec2mainte.EC2MetaMainte{
+		Client: ec2metadata.New(initMetaConfig(t, server.URL)),
 	}
-	cfg.EndpointResolver = aws.ResolveWithEndpointURL(server.URL + "/latest")
 
-	actual, err := checkawsec2mainte.GetInstanceIdFromMetadata(cfg)
+	actual, err := mt.GetInstanceId(context.Background())
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -45,13 +54,11 @@ func TestMaintesFromMetadata(t *testing.T) {
 	})
 	defer server.Close()
 
-	cfg, err := external.LoadDefaultAWSConfig()
-	if err != nil {
-		t.Error(err.Error())
+	mt := checkawsec2mainte.EC2MetaMainte{
+		Client: ec2metadata.New(initMetaConfig(t, server.URL)),
 	}
-	cfg.EndpointResolver = aws.ResolveWithEndpointURL(server.URL + "/latest")
 
-	actual, err := checkawsec2mainte.GetMaintesFromMetadata(cfg)
+	actual, err := mt.GetMaintes(context.Background())
 	if err != nil {
 		t.Error(err.Error())
 	}

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/jessevdk/go-flags"
@@ -102,7 +103,11 @@ func (c Checker) FetchEvents(ctx context.Context) (EC2Events, error) {
 	// Get EC2Events from EC2 Metadata
 	// If Region or Instance ID is empty or not --all specified
 	if (len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll) || c.Opts.Region == "" {
-		events, err := GetMaintesFromMetadata(cfg)
+		mt := EC2MetaMainte{
+			Client: ec2metadata.New(cfg),
+		}
+
+		events, err := mt.GetMaintes(ctx)
 		if err != nil {
 			return nil, err
 		}
