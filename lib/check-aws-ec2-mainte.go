@@ -3,7 +3,6 @@ package checkawsec2mainte
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"runtime"
 	"time"
@@ -37,22 +36,27 @@ type Checker struct {
 }
 
 func Do() {
-	ctx := context.Background()
+	var ckr *checkers.Checker
+	defer func(c *checkers.Checker) {
+		if c != nil {
+			c.Name = "EC2 Mainte"
+			c.Exit()
+		}
+	}(ckr)
 
 	c, err := NewChecker(os.Args)
 	if err != nil {
-		os.Exit(1)
+		ckr = checkers.Unknown(err.Error())
+		return
 	}
 
-	events, err := c.FetchEvents(ctx)
+	events, err := c.FetchEvents(context.Background())
 	if err != nil {
-		log.Fatal(err)
+		ckr = checkers.Unknown(err.Error())
+		return
 	}
 
-	ckr := c.Run(events)
-
-	ckr.Name = "EC2 Mainte"
-	ckr.Exit()
+	ckr = c.Run(events)
 }
 
 func NewChecker(args []string) (*Checker, error) {
