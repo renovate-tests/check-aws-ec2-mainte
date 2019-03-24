@@ -37,12 +37,12 @@ type Checker struct {
 
 func Do() {
 	var ckr *checkers.Checker
-	defer func(c *checkers.Checker) {
-		if c != nil {
-			c.Name = "EC2 Mainte"
-			c.Exit()
+	defer func() {
+		if ckr != nil {
+			ckr.Name = "EC2 Mainte"
+			ckr.Exit()
 		}
-	}(ckr)
+	}()
 
 	c, err := NewChecker(os.Args)
 	if err != nil {
