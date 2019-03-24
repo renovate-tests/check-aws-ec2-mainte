@@ -1,0 +1,11 @@
+plugins:
+  gofmt:
+    enabled: true
+  golint:
+    enabled: true
+  govet:
+    enabled: true
+
+exclude_patterns:
+- "lib/unit/*.go"
+- "**/*_test.go"
