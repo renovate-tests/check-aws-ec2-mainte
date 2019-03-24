@@ -112,7 +112,7 @@ func (c Checker) FetchEvents(ctx context.Context) (EC2Events, error) {
 	}
 
 	mt := EC2Mainte{
-		Client:      ec2.New(cfg),
+		EC2Client:   ec2.New(cfg),
 		InstanceIds: instanceIds,
 	}
 

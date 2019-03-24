@@ -30,7 +30,7 @@ func TestGetMaintesFromAPI(t *testing.T) {
 
 	for _, c := range cases {
 		mt := checkawsec2mainte.EC2Mainte{
-			Client:      mockEc2Svc{Resp: c.Resp},
+			EC2Client:   mockEc2Svc{Resp: c.Resp},
 			InstanceIds: []string{},
 		}
 		events, err := mt.GetMainteInfo(context.Background())
