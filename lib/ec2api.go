@@ -45,9 +45,5 @@ func (mt EC2Mainte) GetEvents(ctx context.Context) (events EC2Events, err error)
 
 	// Parse Descriptions and Set States
 	events.UpdateStates()
-
-	// Remove already completed events
-	// https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceStatusEvent.html
-	events = events.Filter(StateCompleted, StateCanceled)
 	return
 }

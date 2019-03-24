@@ -76,6 +76,14 @@ func CreateCases(t *testing.T) []testCaseMainte {
 					NotAfter:    ds[2], //TODO: Check this field is required
 					State:       checkawsec2mainte.StateActive,
 				},
+				{
+					Code:        ec2.EventCodeInstanceReboot,
+					InstanceId:  "i-0dc818ea941b1ae18",
+					Description: "[Completed] Scheduled Instance Reboot Maintenance",
+					NotBefore:   ds[0],
+					NotAfter:    ds[1],
+					State:       checkawsec2mainte.StateCompleted,
+				},
 			},
 		},
 	}

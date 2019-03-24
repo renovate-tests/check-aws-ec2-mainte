@@ -99,6 +99,9 @@ func (c Checker) FetchEvents(ctx context.Context) (events EC2Events, err error) 
 		cfg.Region = c.Opts.Region // Set Region from --region
 		events, err = c.FetchEC2MainteEvents(ctx, cfg)
 	}
+
+	// Remove already completed events
+	// https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceStatusEvent.html
 	events = events.Filter(StateCompleted, StateCanceled)
 	return
 }
