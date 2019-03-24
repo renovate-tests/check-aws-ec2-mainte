@@ -93,7 +93,6 @@ func TestEventsFromMetadata(t *testing.T) {
 
 	c, err := checkawsec2mainte.NewChecker([]string{
 		"-c", "1m",
-		"-r", "us-west-1",
 	})
 	if err != nil {
 		t.Error(err)

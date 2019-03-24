@@ -23,7 +23,7 @@ var (
 
 // Options ... Commandline Options
 type Options struct {
-	Region       string        `short:"r" long:"region" required:"true" env:"AWS_REGION" description:"AWS Region"`
+	Region       string        `short:"r" long:"region" env:"AWS_REGION" description:"AWS Region"`
 	CritDuration time.Duration `short:"c" long:"critical-duration" default:"72h" description:"Critical while duration"`
 	InstanceIds  []string      `short:"i" long:"instance-id" description:"Filter as EC2 Instance Ids"`
 	IsAll        bool          `short:"a" long:"all" description:"Fetch all instances events"`
@@ -100,7 +100,8 @@ func (c Checker) FetchEvents(ctx context.Context) (EC2Events, error) {
 	instanceIds := c.Opts.InstanceIds
 
 	// Get EC2Events from EC2 Metadata
-	if len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll {
+	// If Region or Instance ID is empty or not --all specified
+	if (len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll) || c.Opts.Region == "" {
 		events, err := GetMaintesFromMetadata(cfg)
 		if err != nil {
 			return nil, err
