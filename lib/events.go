@@ -32,15 +32,14 @@ EVENTS:
 // UpdateStates ... Descriptionに含まれている文字列からStateを設定
 func (evs EC2Events) UpdateStates() {
 	for i, ev := range evs {
-		if strings.Contains(ev.Description, "[Completed]") {
+		switch {
+		case strings.Contains(ev.Description, "[Completed]"):
 			evs[i].State = StateCompleted
-			continue
-		}
-		if strings.Contains(ev.Description, "[Canceled]") {
+		case strings.Contains(ev.Description, "[Canceled]"):
 			evs[i].State = StateCanceled
-			continue
+		default:
+			evs[i].State = StateActive
 		}
-		evs[i].State = StateActive
 	}
 }
 
