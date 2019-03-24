@@ -107,8 +107,7 @@ func (c Checker) FetchEvents(ctx context.Context) (EC2Events, error) {
 			return nil, err
 		}
 
-		events = events.Filter(StateCompleted)
-		events = events.Filter(StateCanceled)
+		events = events.Filter(StateCompleted, StateCanceled)
 		return events, nil
 	}
 

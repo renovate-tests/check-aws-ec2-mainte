@@ -14,12 +14,15 @@ type IEC2Events interface {
 type EC2Events []EC2Event
 
 // Filter ... Filter EC2Events containing substr in Description
-func (evs EC2Events) Filter(state EC2EventState) EC2Events {
+func (evs EC2Events) Filter(states ...EC2EventState) EC2Events {
 	events := EC2Events{}
 
+EVENTS:
 	for _, ev := range evs {
-		if ev.State == state {
-			continue
+		for _, state := range states {
+			if ev.State == state {
+				continue EVENTS // Skip and Next Event
+			}
 		}
 		events = append(events, ev)
 	}
