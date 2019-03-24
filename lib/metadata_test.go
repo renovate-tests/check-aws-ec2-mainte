@@ -42,7 +42,7 @@ func TestGetInstanceIdFromMetadata(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestMaintesFromMetadata(t *testing.T) {
+func TestEventsFromMetadata(t *testing.T) {
 	expectedId := "i-09e032cce9ef71d84"
 	expected := unit.CreateEventsMetadata(t, expectedId)
 
@@ -58,7 +58,7 @@ func TestMaintesFromMetadata(t *testing.T) {
 		Client: ec2metadata.New(initMetaConfig(t, server.URL)),
 	}
 
-	actual, err := mt.GetMaintes(context.Background())
+	actual, err := mt.GetEvents(context.Background())
 	if err != nil {
 		t.Error(err.Error())
 	}

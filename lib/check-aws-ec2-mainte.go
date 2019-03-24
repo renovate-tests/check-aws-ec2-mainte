@@ -99,6 +99,7 @@ func (c Checker) FetchEvents(ctx context.Context) (events EC2Events, err error) 
 		cfg.Region = c.Opts.Region // Set Region from --region
 		events, err = c.FetchEC2MainteEvents(ctx, cfg)
 	}
+	events = events.Filter(StateCompleted, StateCanceled)
 	return
 }
 
@@ -122,7 +123,7 @@ func (c Checker) FetchEC2MainteEvents(ctx context.Context, cfg aws.Config) (EC2E
 		InstanceIds: c.Opts.InstanceIds, // If fetch events for all instances, instanceId must empty
 	}
 
-	events, err := mt.GetMainteInfo(ctx)
+	events, err := mt.GetEvents(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -136,11 +137,10 @@ func (_ Checker) FetchEC2MetaMainteEvents(ctx context.Context, cfg aws.Config) (
 		Client: ec2metadata.New(cfg),
 	}
 
-	events, err := mt.GetMaintes(ctx)
+	events, err := mt.GetEvents(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	events = events.Filter(StateCompleted, StateCanceled)
 	return events, nil
 }

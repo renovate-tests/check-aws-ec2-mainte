@@ -25,7 +25,7 @@ func (m mockEc2Svc) DescribeInstanceStatusRequest(input *ec2.DescribeInstanceSta
 	}
 }
 
-func TestGetMaintesFromAPI(t *testing.T) {
+func TestEventsFromEC2API(t *testing.T) {
 	cases := unit.CreateCases(t)
 
 	for _, c := range cases {
@@ -33,7 +33,7 @@ func TestGetMaintesFromAPI(t *testing.T) {
 			Client:      mockEc2Svc{Resp: c.Resp},
 			InstanceIds: []string{},
 		}
-		events, err := mt.GetMainteInfo(context.Background())
+		events, err := mt.GetEvents(context.Background())
 		if err != nil {
 			t.Error(err)
 		}

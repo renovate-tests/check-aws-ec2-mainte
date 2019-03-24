@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCheckerIsCritical(t *testing.T) {
+func TestCheckerIsCriticalViaCLI(t *testing.T) {
 	events := unit.CreateEvents(t)
 
 	c, err := checkawsec2mainte.NewChecker([]string{
@@ -27,7 +27,7 @@ func TestCheckerIsCritical(t *testing.T) {
 	assert.Equal(t, checkers.CRITICAL, ckr.Status)
 }
 
-func TestCheckerIsWarning(t *testing.T) {
+func TestCheckerIsWarningViaCLI(t *testing.T) {
 	events := unit.CreateEvents(t)
 
 	c, err := checkawsec2mainte.NewChecker([]string{
@@ -43,7 +43,7 @@ func TestCheckerIsWarning(t *testing.T) {
 	assert.Equal(t, checkers.WARNING, ckr.Status)
 }
 
-func TestCheckerIsOk(t *testing.T) {
+func TestCheckerIsOkViaCLI(t *testing.T) {
 	events := checkawsec2mainte.EC2Events{}
 	assert.Len(t, events, 0)
 	assert.Zero(t, events.Len())
@@ -60,7 +60,7 @@ func TestCheckerIsOk(t *testing.T) {
 	assert.Equal(t, checkers.OK, ckr.Status)
 }
 
-func TestOverCheckerIsCritical(t *testing.T) {
+func TestOverCheckerIsCriticalViaCLI(t *testing.T) {
 	events := unit.CreateEvents(t)
 
 	c, err := checkawsec2mainte.NewChecker([]string{
@@ -79,7 +79,7 @@ func TestOverCheckerIsCritical(t *testing.T) {
 	assert.Equal(t, checkers.CRITICAL, ckr.Status)
 }
 
-func TestEventsFromMetadata(t *testing.T) {
+func TestEventsFromMetadataViaCLI(t *testing.T) {
 	expectedId := "i-09e032cce9ef71d84"
 	expected := unit.CreateEventsMetadata(t, expectedId)
 

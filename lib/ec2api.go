@@ -12,8 +12,8 @@ type EC2Mainte struct {
 	InstanceIds []string
 }
 
-// GetMainteInfo ... Call API and get specified events
-func (mt EC2Mainte) GetMainteInfo(ctx context.Context) (events EC2Events, err error) {
+// Call API and get specified events
+func (mt EC2Mainte) GetEvents(ctx context.Context) (events EC2Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
 
 	// If InstanceIds is empty, get all EC2 Events
