@@ -8,11 +8,11 @@ import (
 )
 
 type EC2Mainte struct {
-	EC2Client   ec2iface.EC2API
+	Client      ec2iface.EC2API
 	InstanceIds []string
 }
 
-// GetMainteInfo ... Call EC2 API and get specified events
+// GetMainteInfo ... Call API and get specified events
 func (mt EC2Mainte) GetMainteInfo(ctx context.Context) (events EC2Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
 
@@ -21,7 +21,7 @@ func (mt EC2Mainte) GetMainteInfo(ctx context.Context) (events EC2Events, err er
 		options.InstanceIds = mt.InstanceIds
 	}
 
-	req := mt.EC2Client.DescribeInstanceStatusRequest(options)
+	req := mt.Client.DescribeInstanceStatusRequest(options)
 	req.SetContext(ctx)
 	res, err := req.Send()
 	if err != nil {
