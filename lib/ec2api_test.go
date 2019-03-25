@@ -4,12 +4,14 @@ import (
 	"context"
 	"testing"
 
+	"github.com/k0kubun/pp"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
-	"github.com/k0kubun/pp"
+
 	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/ntrv/check-aws-ec2-mainte/lib/unit"
-	"github.com/stretchr/testify/assert"
 )
 
 type mockEc2Svc struct {

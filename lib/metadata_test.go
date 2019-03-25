@@ -5,13 +5,15 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/k0kubun/pp"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
-	"github.com/k0kubun/pp"
+
 	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/ntrv/check-aws-ec2-mainte/lib/unit"
-	"github.com/stretchr/testify/assert"
 )
 
 func initMetaConfig(t *testing.T, endpoint string) aws.Config {

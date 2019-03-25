@@ -6,9 +6,10 @@ import (
 
 	"github.com/k0kubun/pp"
 	"github.com/mackerelio/checkers"
+	"github.com/stretchr/testify/assert"
+
 	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/ntrv/check-aws-ec2-mainte/lib/unit"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCheckerIsCriticalViaCLI(t *testing.T) {

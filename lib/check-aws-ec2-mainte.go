@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+
 	"github.com/jessevdk/go-flags"
 	"github.com/mackerelio/checkers"
 )

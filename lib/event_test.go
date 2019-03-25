@@ -4,8 +4,9 @@ import (
 	"testing"
 	"time"
 
-	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 	"github.com/stretchr/testify/assert"
+
+	checkawsec2mainte "github.com/ntrv/check-aws-ec2-mainte/lib"
 )
 
 func TestTimeIsOver(t *testing.T) {
