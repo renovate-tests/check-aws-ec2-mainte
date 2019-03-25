@@ -13,7 +13,7 @@ type EC2Mainte struct {
 }
 
 // Call API and get specified events
-func (mt EC2Mainte) GetEvents(ctx context.Context) (events EC2Events, err error) {
+func (mt EC2Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
 
 	// If InstanceIds is empty, get all EC2 Events
@@ -32,7 +32,7 @@ func (mt EC2Mainte) GetEvents(ctx context.Context) (events EC2Events, err error)
 	for _, instance := range res.InstanceStatuses {
 		if len(instance.Events) != 0 {
 			for _, ev := range instance.Events {
-				events = append(events, EC2Event{
+				events = append(events, Event{
 					Code:        ev.Code,
 					InstanceId:  *instance.InstanceId,
 					NotAfter:    *ev.NotAfter,

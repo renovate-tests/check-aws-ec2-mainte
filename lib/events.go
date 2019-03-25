@@ -11,11 +11,11 @@ type IEC2Events interface {
 	Len() int
 }
 
-type EC2Events []EC2Event
+type Events []Event
 
 // Filter ... Filter EC2Events containing substr in Description
-func (evs EC2Events) Filter(states ...EC2EventState) EC2Events {
-	events := EC2Events{}
+func (evs Events) Filter(states ...EventState) Events {
+	events := Events{}
 
 EVENTS:
 	for _, ev := range evs {
@@ -30,7 +30,7 @@ EVENTS:
 }
 
 // UpdateStates ... Descriptionに含まれている文字列からStateを設定
-func (evs EC2Events) UpdateStates() {
+func (evs Events) UpdateStates() {
 	for i, ev := range evs {
 		switch {
 		case strings.Contains(ev.Description, "[Completed]"):
@@ -44,10 +44,10 @@ func (evs EC2Events) UpdateStates() {
 }
 
 // GetCloseEvent ... Get oldest EC2Event
-func (evs EC2Events) GetCloseEvent() EC2Event {
+func (evs Events) GetCloseEvent() Event {
 	// Copy to temporary variable
 	// Prevent to mutate self
-	events := make(EC2Events, cap(evs))
+	events := make(Events, cap(evs))
 	copy(events, evs)
 
 	// Sort as NotBefore date
@@ -57,7 +57,7 @@ func (evs EC2Events) GetCloseEvent() EC2Event {
 }
 
 // BeforeAll ...
-func (evs EC2Events) BeforeAll(d time.Time) bool {
+func (evs Events) BeforeAll(d time.Time) bool {
 	for _, ev := range evs {
 		if ev.NotBefore.After(d) {
 			return false
@@ -67,16 +67,16 @@ func (evs EC2Events) BeforeAll(d time.Time) bool {
 }
 
 // Len ... Implement sort.Interface
-func (evs EC2Events) Len() int {
+func (evs Events) Len() int {
 	return len(evs)
 }
 
 // Less ... Implement sort.Interface
-func (evs EC2Events) Less(i, j int) bool {
+func (evs Events) Less(i, j int) bool {
 	return evs[i].NotBefore.Unix() < evs[j].NotBefore.Unix()
 }
 
 // Swap ... Implement sort.Interface
-func (evs EC2Events) Swap(i, j int) {
+func (evs Events) Swap(i, j int) {
 	evs[i], evs[j] = evs[j], evs[i]
 }

@@ -33,7 +33,7 @@ func TestBeforeAllisOk(t *testing.T) {
 
 	now := unit.CreateTime(t, "2019-03-20T19:00:00+09:00") // Future
 
-	events := checkawsec2mainte.EC2Events{
+	events := checkawsec2mainte.Events{
 		{
 			NotBefore: ds[0],
 		},
@@ -65,7 +65,7 @@ func TestBeforeAllisNotOk(t *testing.T) {
 
 	now := unit.CreateTime(t, "2019-03-16T19:00:00+09:00") // intermediate
 
-	events := checkawsec2mainte.EC2Events{
+	events := checkawsec2mainte.Events{
 		{
 			NotBefore: ds[0],
 		},

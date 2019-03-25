@@ -24,7 +24,7 @@ func (mm *EC2MetaMainte) GetInstanceId(ctx context.Context) (string, error) {
 }
 
 // Get Scheduled Maintenances
-func (mm *EC2MetaMainte) GetEvents(ctx context.Context) (events EC2Events, err error) {
+func (mm *EC2MetaMainte) GetEvents(ctx context.Context) (events Events, err error) {
 	mm.Client.Config.HTTPClient.Timeout = 100 * time.Millisecond
 
 	data, err := mm.Client.GetMetadata("events/maintenance/scheduled")

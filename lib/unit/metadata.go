@@ -23,7 +23,7 @@ func StartTestServer(patterns map[string]string) *httptest.Server {
 	)
 }
 
-func CreateEventsMetadata(t *testing.T, instanceId string) checkawsec2mainte.EC2Events {
+func CreateEventsMetadata(t *testing.T, instanceId string) checkawsec2mainte.Events {
 	ds := CreateTimes(t, []string{
 		"2019-03-14T16:04:05+09:00",
 		"2019-03-16T16:04:05+09:00",
@@ -31,7 +31,7 @@ func CreateEventsMetadata(t *testing.T, instanceId string) checkawsec2mainte.EC2
 		"2019-03-17T17:34:35+09:00",
 	})
 
-	return checkawsec2mainte.EC2Events{
+	return checkawsec2mainte.Events{
 		{
 			Code:        ec2.EventCodeSystemReboot,
 			InstanceId:  instanceId,

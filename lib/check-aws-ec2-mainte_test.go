@@ -45,7 +45,7 @@ func TestCheckerIsWarningViaCLI(t *testing.T) {
 }
 
 func TestCheckerIsOkViaCLI(t *testing.T) {
-	events := checkawsec2mainte.EC2Events{}
+	events := checkawsec2mainte.Events{}
 	assert.Len(t, events, 0)
 	assert.Zero(t, events.Len())
 

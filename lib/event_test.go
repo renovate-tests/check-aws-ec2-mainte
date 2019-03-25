@@ -13,7 +13,7 @@ func TestTimeIsOver(t *testing.T) {
 	past, _ := time.Parse(time.RFC3339, "2006-01-02T15:04:05+07:00")
 	future, _ := time.Parse(time.RFC3339, "2018-03-15T19:14:05+09:00")
 
-	mainte := checkawsec2mainte.EC2Event{
+	mainte := checkawsec2mainte.Event{
 		NotBefore: past,
 	}
 
@@ -24,7 +24,7 @@ func TestTimeIsNotOver(t *testing.T) {
 	past, _ := time.Parse(time.RFC3339, "2006-01-02T15:04:05+09:00")
 	future, _ := time.Parse(time.RFC3339, "2006-01-02T15:04:05+07:00")
 
-	mainte := checkawsec2mainte.EC2Event{
+	mainte := checkawsec2mainte.Event{
 		NotBefore: future,
 	}
 

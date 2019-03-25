@@ -24,7 +24,7 @@ func CreateTimes(t *testing.T, values []string) (ds []time.Time) {
 	return
 }
 
-func CreateEvents(t *testing.T) checkawsec2mainte.EC2Events {
+func CreateEvents(t *testing.T) checkawsec2mainte.Events {
 	ds := CreateTimes(t, []string{
 		"2019-03-14T16:04:05+09:00",
 		"2019-03-16T16:04:05+09:00",
@@ -34,7 +34,7 @@ func CreateEvents(t *testing.T) checkawsec2mainte.EC2Events {
 		"2019-03-17T18:04:05+07:00",
 	})
 
-	return checkawsec2mainte.EC2Events{
+	return checkawsec2mainte.Events{
 		{
 			Code:        ec2.EventCodeSystemReboot,
 			InstanceId:  "i-9263d590",

@@ -86,7 +86,7 @@ func NewChecker(args []string) (*Checker, error) {
 	}, nil
 }
 
-func (c Checker) FetchEvents(ctx context.Context) (events EC2Events, err error) {
+func (c Checker) FetchEvents(ctx context.Context) (events Events, err error) {
 	// The default configuration sources are:
 	// * Environment Variables
 	// * Shared Configuration and Shared Credentials files.
@@ -111,7 +111,7 @@ func (c Checker) FetchEvents(ctx context.Context) (events EC2Events, err error) 
 	return
 }
 
-func (c Checker) Run(events EC2Events) *checkers.Checker {
+func (c Checker) Run(events Events) *checkers.Checker {
 	if events.Len() != 0 {
 		event := events.GetCloseEvent()
 
@@ -125,7 +125,7 @@ func (c Checker) Run(events EC2Events) *checkers.Checker {
 }
 
 // Get EC2Events from Real EC2 API
-func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (EC2Events, error) {
+func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (Events, error) {
 	mt := EC2Mainte{
 		Client:      ec2.New(cfg),
 		InstanceIds: c.Opts.InstanceIds, // If fetch events for all instances, instanceId must empty
@@ -140,7 +140,7 @@ func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (EC2Events,
 
 // Get EC2Events from EC2 Metadata
 // If Region or Instance ID is empty or not --all specified
-func (_ Checker) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (EC2Events, error) {
+func (_ Checker) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (Events, error) {
 	mt := EC2MetaMainte{
 		Client: ec2metadata.New(cfg),
 	}

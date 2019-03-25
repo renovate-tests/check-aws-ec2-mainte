@@ -11,7 +11,7 @@ import (
 
 type testCaseMainte struct {
 	Resp     ec2.DescribeInstanceStatusOutput
-	Expected checkawsec2mainte.EC2Events
+	Expected checkawsec2mainte.Events
 }
 
 func CreateCases(t *testing.T) []testCaseMainte {
@@ -60,7 +60,7 @@ func CreateCases(t *testing.T) []testCaseMainte {
 					},
 				},
 			},
-			Expected: checkawsec2mainte.EC2Events{
+			Expected: checkawsec2mainte.Events{
 				{
 					Code:        ec2.EventCodeSystemMaintenance,
 					InstanceId:  "i-0472b8a82f226da14",
