@@ -3,6 +3,7 @@ package checkawsec2mainte
 import (
 	"context"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 )
@@ -34,10 +35,10 @@ func (mt EC2Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 			for _, ev := range instance.Events {
 				events = append(events, Event{
 					Code:        ev.Code,
-					InstanceId:  *instance.InstanceId,
-					NotAfter:    *ev.NotAfter,
-					NotBefore:   *ev.NotBefore,
-					Description: *ev.Description,
+					InstanceId:  aws.StringValue(instance.InstanceId),
+					NotAfter:    aws.TimeValue(ev.NotAfter),
+					NotBefore:   aws.TimeValue(ev.NotBefore),
+					Description: aws.StringValue(ev.Description),
 				})
 			}
 		}
