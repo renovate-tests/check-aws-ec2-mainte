@@ -97,12 +97,12 @@ func (c Checker) FetchEvents(ctx context.Context) (events EC2Events, err error) 
 
 	switch {
 	case c.Opts.Region == "":
-		events, err = c.FetchEC2MetaMainteEvents(ctx, cfg)
+		events, err = c.FetchEC2MetaEvents(ctx, cfg)
 	case len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll:
-		events, err = c.FetchEC2MetaMainteEvents(ctx, cfg)
+		events, err = c.FetchEC2MetaEvents(ctx, cfg)
 	default: // len(c.Opts.InstanceIds) != 0 || c.Opts.IsAll
 		cfg.Region = c.Opts.Region // Set Region from --region
-		events, err = c.FetchEC2MainteEvents(ctx, cfg)
+		events, err = c.FetchEC2Events(ctx, cfg)
 	}
 
 	// Remove already completed events
@@ -125,7 +125,7 @@ func (c Checker) Run(events EC2Events) *checkers.Checker {
 }
 
 // Get EC2Events from Real EC2 API
-func (c Checker) FetchEC2MainteEvents(ctx context.Context, cfg aws.Config) (EC2Events, error) {
+func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (EC2Events, error) {
 	mt := EC2Mainte{
 		Client:      ec2.New(cfg),
 		InstanceIds: c.Opts.InstanceIds, // If fetch events for all instances, instanceId must empty
@@ -140,7 +140,7 @@ func (c Checker) FetchEC2MainteEvents(ctx context.Context, cfg aws.Config) (EC2E
 
 // Get EC2Events from EC2 Metadata
 // If Region or Instance ID is empty or not --all specified
-func (_ Checker) FetchEC2MetaMainteEvents(ctx context.Context, cfg aws.Config) (EC2Events, error) {
+func (_ Checker) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (EC2Events, error) {
 	mt := EC2MetaMainte{
 		Client: ec2metadata.New(cfg),
 	}
