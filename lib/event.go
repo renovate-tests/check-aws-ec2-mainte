@@ -34,7 +34,7 @@ func (ev Event) IsTimeOver(now time.Time, d time.Duration) bool {
 func (ev Event) CreateMessage() string {
 	// Load Location from $TZ or /etc/localtime
 	return fmt.Sprintf(
-		"Code: %v, InstanceId: %v, Date: %v - %v, Description: %v",
+		"Code: %v, InstanceId: %v, TimeRange: %v to %v, Description: %v",
 		ev.Code,
 		ev.InstanceId,
 		ev.NotBefore.In(time.Local).Format(time.RFC3339),
