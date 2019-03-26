@@ -1,0 +1,25 @@
+[
+  {
+    "NotBefore": "5 Apr 2019 20:00:00 GMT",
+    "Code": "system-reboot",
+    "Description": "scheduled reboot ",
+    "EventId": "instance-event-0eeedcbf818fea702",
+    "NotAfter": "5 Apr 2019 22:00:00 GMT",
+    "State": "active"
+  },
+  {
+    "NotBefore": "5 Apr 2019 19:00:00 GMT",
+    "Code": "system-maintenance",
+    "Description": "[Completed] Scheduled System Maintenance",
+    "EventId": "instance-event-0eeedcbf818fea702",
+    "NotAfter": "6 Apr 2019 02:00:00 GMT",
+    "State": "completed"
+  },
+  {
+    "NotBefore": "5 Apr 2019 20:00:00 GMT",
+    "Code": "instance-retirement",
+    "Description": "[Canceled] Scheduled Instance Retirement Maintenance",
+    "EventId": "instance-event-0eeedcbf818fea702",
+    "State": "canceled"
+  }
+]

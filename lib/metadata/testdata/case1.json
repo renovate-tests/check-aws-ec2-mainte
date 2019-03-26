@@ -1,0 +1,10 @@
+[
+  {
+    "NotBefore": "5 Apr 2019 20:00:00 GMT",
+    "Code": "system-reboot",
+    "Description": "scheduled reboot ",
+    "EventId": "instance-event-0eeedcbf818fea702",
+    "NotAfter": "5 Apr 2019 22:00:00 GMT",
+    "State": "active"
+  }
+]
