@@ -79,9 +79,9 @@ func (evs Events) Swap(i, j int) {
 	evs[i], evs[j] = evs[j], evs[i]
 }
 
-func (evs Events) SetMetadataEvents(events metadata.Events) {
+func (evs *Events) SetMetadataEvents(events metadata.Events) {
 	for _, event := range events {
-		evs = append(evs, Event{
+		*evs = append(*evs, Event{
 			Code:        event.Code,
 			InstanceId:  event.InstanceId,
 			NotBefore:   time.Time(event.NotBefore),
@@ -92,9 +92,9 @@ func (evs Events) SetMetadataEvents(events metadata.Events) {
 	}
 }
 
-func (evs Events) SetEC2APIEvents(events ec2api.Events) {
+func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
 	for _, event := range events {
-		evs = append(evs, Event{
+		*evs = append(*evs, Event{
 			Code:        event.Code,
 			InstanceId:  event.InstanceId,
 			NotBefore:   event.NotBefore,
