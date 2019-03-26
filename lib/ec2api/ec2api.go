@@ -1,4 +1,4 @@
-package checkawsec2mainte
+package ec2api
 
 import (
 	"context"
@@ -8,13 +8,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 )
 
-type EC2Mainte struct {
+type Mainte struct {
 	Client      ec2iface.EC2API
 	InstanceIds []string
 }
 
 // Call API and get specified events
-func (mt EC2Mainte) GetEvents(ctx context.Context) (events Events, err error) {
+func (mt Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
 
 	// If InstanceIds is empty, get all EC2 Events
@@ -43,8 +43,5 @@ func (mt EC2Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 			}
 		}
 	}
-
-	// Parse Descriptions and Set States
-	events.UpdateStates()
 	return
 }

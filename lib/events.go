@@ -4,12 +4,10 @@ import (
 	"sort"
 	"strings"
 	"time"
-)
 
-type IEC2Events interface {
-	GetCloseEvent() EC2Mainte
-	Len() int
-}
+	"github.com/ntrv/check-aws-ec2-mainte/lib/ec2api"
+	"github.com/ntrv/check-aws-ec2-mainte/lib/metadata"
+)
 
 type Events []Event
 
@@ -79,4 +77,30 @@ func (evs Events) Less(i, j int) bool {
 // Swap ... Implement sort.Interface
 func (evs Events) Swap(i, j int) {
 	evs[i], evs[j] = evs[j], evs[i]
+}
+
+func (evs *Events) SetMetadataEvents(events metadata.Events) {
+	for _, event := range events {
+		*evs = append(*evs, Event{
+			Code:        event.Code,
+			InstanceId:  event.InstanceId,
+			NotBefore:   time.Time(event.NotBefore),
+			NotAfter:    time.Time(event.NotAfter),
+			Description: event.Description,
+			State:       EventState(event.State),
+		})
+	}
+}
+
+func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
+	for _, event := range events {
+		*evs = append(*evs, Event{
+			Code:        event.Code,
+			InstanceId:  event.InstanceId,
+			NotBefore:   event.NotBefore,
+			NotAfter:    event.NotAfter,
+			Description: event.Description,
+		})
+	}
+	evs.UpdateStates()
 }

@@ -22,7 +22,7 @@ type Event struct {
 	NotBefore   time.Time     `json:"NotBefore"`
 	NotAfter    time.Time     `json:"NotAfter"`
 	Description string        `json:"Description"`
-	State       EventState `json:"State"`
+	State       EventState    `json:"State"`
 }
 
 // IsTimeOver ... EC2Eventが引数より新しいかどうか
@@ -34,7 +34,7 @@ func (ev Event) IsTimeOver(now time.Time, d time.Duration) bool {
 func (ev Event) CreateMessage() string {
 	// Load Location from $TZ or /etc/localtime
 	return fmt.Sprintf(
-		"Code: %v, InstanceId: %v, Date: %v - %v, Description: %v",
+		"Code: %v, InstanceId: %v, TimeRange: %v to %v, Description: %v",
 		ev.Code,
 		ev.InstanceId,
 		ev.NotBefore.In(time.Local).Format(time.RFC3339),

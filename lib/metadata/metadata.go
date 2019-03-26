@@ -1,4 +1,4 @@
-package checkawsec2mainte
+package metadata
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 )
 
-type EC2MetaMainte struct {
+type Mainte struct {
 	Client *ec2metadata.EC2Metadata
 }
 
 // Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
-func (mm *EC2MetaMainte) GetInstanceId(ctx context.Context) (string, error) {
+func (mm *Mainte) GetInstanceId(ctx context.Context) (string, error) {
 	mm.Client.Config.HTTPClient.Timeout = 100 * time.Millisecond
 
 	id, err := mm.Client.GetMetadata("instance-id")
@@ -24,7 +24,7 @@ func (mm *EC2MetaMainte) GetInstanceId(ctx context.Context) (string, error) {
 }
 
 // Get Scheduled Maintenances
-func (mm *EC2MetaMainte) GetEvents(ctx context.Context) (events Events, err error) {
+func (mm *Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 	mm.Client.Config.HTTPClient.Timeout = 100 * time.Millisecond
 
 	data, err := mm.Client.GetMetadata("events/maintenance/scheduled")

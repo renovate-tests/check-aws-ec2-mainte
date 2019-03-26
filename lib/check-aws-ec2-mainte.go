@@ -8,10 +8,6 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go-v2/aws/external"
-	"github.com/aws/aws-sdk-go-v2/service/ec2"
-
 	"github.com/jessevdk/go-flags"
 	"github.com/mackerelio/checkers"
 )
@@ -29,11 +25,6 @@ type Options struct {
 	InstanceIds  []string      `short:"i" long:"instance-id" description:"Filter as EC2 Instance Ids"`
 	IsAll        bool          `short:"a" long:"all" description:"Fetch all instances events"`
 	Version      func()        `short:"v" long:"version" description:"Print Build Information"`
-}
-
-type Checker struct {
-	Opts Options
-	Now  time.Time
 }
 
 func Do() {
@@ -58,6 +49,11 @@ func Do() {
 	}
 
 	ckr = c.Run(events)
+}
+
+type Checker struct {
+	Opts Options
+	Now  time.Time
 }
 
 func NewChecker(args []string) (*Checker, error) {
@@ -86,31 +82,6 @@ func NewChecker(args []string) (*Checker, error) {
 	}, nil
 }
 
-func (c Checker) FetchEvents(ctx context.Context) (events Events, err error) {
-	// The default configuration sources are:
-	// * Environment Variables
-	// * Shared Configuration and Shared Credentials files.
-	cfg, err := external.LoadDefaultAWSConfig()
-	if err != nil {
-		return
-	}
-
-	switch {
-	case c.Opts.Region == "":
-		events, err = c.FetchEC2MetaEvents(ctx, cfg)
-	case len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll:
-		events, err = c.FetchEC2MetaEvents(ctx, cfg)
-	default: // len(c.Opts.InstanceIds) != 0 || c.Opts.IsAll
-		cfg.Region = c.Opts.Region // Set Region from --region
-		events, err = c.FetchEC2Events(ctx, cfg)
-	}
-
-	// Remove already completed events
-	// https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceStatusEvent.html
-	events = events.Filter(StateCompleted, StateCanceled)
-	return
-}
-
 func (c Checker) Run(events Events) *checkers.Checker {
 	if events.Len() != 0 {
 		event := events.GetCloseEvent()
@@ -122,33 +93,4 @@ func (c Checker) Run(events Events) *checkers.Checker {
 	}
 
 	return checkers.Ok("Not coming EC2 instance events")
-}
-
-// Get EC2Events from Real EC2 API
-func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (Events, error) {
-	mt := EC2Mainte{
-		Client:      ec2.New(cfg),
-		InstanceIds: c.Opts.InstanceIds, // If fetch events for all instances, instanceId must empty
-	}
-
-	events, err := mt.GetEvents(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return events, nil
-}
-
-// Get EC2Events from EC2 Metadata
-// If Region or Instance ID is empty or not --all specified
-func (_ Checker) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (Events, error) {
-	mt := EC2MetaMainte{
-		Client: ec2metadata.New(cfg),
-	}
-
-	events, err := mt.GetEvents(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return events, nil
 }
