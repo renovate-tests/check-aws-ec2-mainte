@@ -77,12 +77,15 @@ func readTestCase(t *testing.T, filename string, instanceId string) (events Even
 func TestMarshalNoError(t *testing.T) {
 	for _, c := range testCases {
 		t.Run(filepath.Base(c.fname), func(t *testing.T) {
-			events, _ := readTestCase(t, c.fname, c.instanceId)
+			events, expected := readTestCase(t, c.fname, c.instanceId)
 
-			_, err := json.MarshalIndent(events, "", " ")
+			actual, err := json.MarshalIndent(events, "", " ")
 			if err != nil {
 				t.Error(err)
 			}
+
+			t.Skip("TODO: Should match JSON from file and Marshaled struct")
+			assert.JSONEq(t, string(expected), string(actual))
 		})
 	}
 }
