@@ -84,12 +84,13 @@ func NewChecker(args []string) (*Checker, error) {
 
 func (c Checker) Run(events Events) *checkers.Checker {
 	if events.Len() != 0 {
+		msg := events.CreateMessage()
 		event := events.GetCloseEvent()
 
 		if event.IsTimeOver(c.Now, c.Opts.CritDuration) {
-			return checkers.Critical(event.CreateMessage())
+			return checkers.Critical(msg)
 		}
-		return checkers.Warning(event.CreateMessage())
+		return checkers.Warning(msg)
 	}
 
 	return checkers.Ok("Not coming EC2 instance events")

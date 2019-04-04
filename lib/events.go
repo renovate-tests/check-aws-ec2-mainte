@@ -1,6 +1,7 @@
 package checkawsec2mainte
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 	"time"
@@ -103,4 +104,15 @@ func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
 		})
 	}
 	evs.UpdateStates()
+}
+
+// CreateMessage ... Information for displaying to Mackerel
+func (evs Events) CreateMessage() string {
+	ev := evs.GetCloseEvent()
+
+	return fmt.Sprintf(
+		"Instances: %v, %v",
+		evs.Len(),
+		ev.CreateMessage(),
+	)
 }
