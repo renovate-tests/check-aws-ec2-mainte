@@ -20,7 +20,7 @@ const (
 // Event ... Almost same as ec2.InstanceStatusEvent
 type Event struct {
 	Code        ec2.EventCode `json:"Code"`
-	InstanceId  string        `json:"-"`
+	InstanceID  string        `json:"-"`
 	NotBefore   time.Time     `json:"NotBefore"`
 	NotAfter    time.Time     `json:"NotAfter"`
 	Description string        `json:"Description"`
@@ -38,7 +38,7 @@ func (ev Event) CreateMessage() string {
 	return fmt.Sprintf(
 		"Code: %v, InstanceId: %v, TimeRange: %v to %v, Description: %v",
 		ev.Code,
-		ev.InstanceId,
+		ev.InstanceID,
 		ev.NotBefore.In(time.Local).Format(time.RFC3339),
 		ev.NotAfter.In(time.Local).Format(time.RFC3339),
 		ev.Description,
