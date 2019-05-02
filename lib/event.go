@@ -33,7 +33,7 @@ func (ev Event) IsTimeOver(now time.Time, d time.Duration) bool {
 }
 
 // CreateMessage ... Information for displaying to Mackerel
-func (ev Event) CreateMessage() string {
+func (ev Event) String() string {
 	// Load Location from $TZ or /etc/localtime
 	return fmt.Sprintf(
 		"Code: %v, InstanceId: %v, TimeRange: %v to %v, Description: %v",

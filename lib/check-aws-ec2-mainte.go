@@ -88,7 +88,7 @@ func NewChecker(args []string) (*Checker, error) {
 // Run ...
 func (c Checker) Run(events Events) *checkers.Checker {
 	if events.Len() != 0 {
-		msg := events.CreateMessage()
+		msg := events.String()
 		event := events.GetCloseEvent()
 
 		if event.IsTimeOver(c.Now, c.Opts.CritDuration) {

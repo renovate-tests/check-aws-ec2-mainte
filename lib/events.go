@@ -110,12 +110,12 @@ func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
 }
 
 // CreateMessage ... Information for displaying to Mackerel
-func (evs Events) CreateMessage() string {
+func (evs Events) String() string {
 	ev := evs.GetCloseEvent()
 
 	return fmt.Sprintf(
 		"Instances: %v, %v",
 		evs.Len(),
-		ev.CreateMessage(),
+		ev.String(),
 	)
 }
