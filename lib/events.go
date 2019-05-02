@@ -113,6 +113,10 @@ func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
 func (evs Events) String() string {
 	ev := evs.GetCloseEvent()
 
+	if evs.Len() <= 1 {
+		return ev.String()
+	}
+
 	return fmt.Sprintf(
 		"Instances: %v, %v",
 		evs.Len(),
