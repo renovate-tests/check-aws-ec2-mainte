@@ -55,7 +55,7 @@ func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (events Eve
 
 // FetchEC2MetaEvents ... Get EC2Events from EC2 Metadata
 // If Region or Instance ID is empty or not --all specified
-func (_ Checker) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (events Events, err error) {
+func (c Checker) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (events Events, err error) {
 	mt := metadata.Mainte{
 		Client: ec2metadata.New(cfg),
 	}
