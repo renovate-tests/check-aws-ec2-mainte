@@ -12,6 +12,7 @@ import (
 	"github.com/ntrv/check-aws-ec2-mainte/lib/metadata"
 )
 
+// FetchEvents ...
 func (c Checker) FetchEvents(ctx context.Context) (events Events, err error) {
 	// The default configuration sources are:
 	// * Environment Variables
@@ -37,7 +38,7 @@ func (c Checker) FetchEvents(ctx context.Context) (events Events, err error) {
 	return
 }
 
-// Get EC2Events from Real EC2 API
+// FetchEC2Events ... Get EC2Events from Real EC2 API
 func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (events Events, err error) {
 	mt := ec2api.Mainte{
 		Client:      ec2.New(cfg),
@@ -52,7 +53,7 @@ func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (events Eve
 	return
 }
 
-// Get EC2Events from EC2 Metadata
+// FetchEC2MetaEvents ... Get EC2Events from EC2 Metadata
 // If Region or Instance ID is empty or not --all specified
 func (_ Checker) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (events Events, err error) {
 	mt := metadata.Mainte{

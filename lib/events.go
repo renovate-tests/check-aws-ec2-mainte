@@ -10,6 +10,7 @@ import (
 	"github.com/ntrv/check-aws-ec2-mainte/lib/metadata"
 )
 
+// Events ...
 type Events []Event
 
 // Filter ... Filter EC2Events containing substr in Description
@@ -80,6 +81,7 @@ func (evs Events) Swap(i, j int) {
 	evs[i], evs[j] = evs[j], evs[i]
 }
 
+// SetMetadataEvents ...
 func (evs *Events) SetMetadataEvents(events metadata.Events) {
 	for _, event := range events {
 		*evs = append(*evs, Event{
@@ -93,6 +95,7 @@ func (evs *Events) SetMetadataEvents(events metadata.Events) {
 	}
 }
 
+// SetEC2APIEvents ...
 func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
 	for _, event := range events {
 		*evs = append(*evs, Event{

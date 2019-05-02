@@ -7,15 +7,17 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
 
+// EventState ...
 type EventState string
 
+// State ...
 const (
 	StateActive    EventState = "active"
 	StateCompleted EventState = "completed"
 	StateCanceled  EventState = "canceled"
 )
 
-// EC2Event ... Almost same as ec2.InstanceStatusEvent
+// Event ... Almost same as ec2.InstanceStatusEvent
 type Event struct {
 	Code        ec2.EventCode `json:"Code"`
 	InstanceId  string        `json:"-"`

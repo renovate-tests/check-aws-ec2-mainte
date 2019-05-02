@@ -27,6 +27,7 @@ type Options struct {
 	Version      func()        `short:"v" long:"version" description:"Print Build Information"`
 }
 
+// Do ...
 func Do() {
 	var ckr *checkers.Checker
 	defer func() {
@@ -51,11 +52,13 @@ func Do() {
 	ckr = c.Run(events)
 }
 
+// Checker ...
 type Checker struct {
 	Opts Options
 	Now  time.Time
 }
 
+// NewChecker ...
 func NewChecker(args []string) (*Checker, error) {
 	opts := Options{}
 
@@ -82,6 +85,7 @@ func NewChecker(args []string) (*Checker, error) {
 	}, nil
 }
 
+// Run ...
 func (c Checker) Run(events Events) *checkers.Checker {
 	if events.Len() != 0 {
 		msg := events.CreateMessage()
