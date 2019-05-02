@@ -53,13 +53,13 @@ func Do() {
 }
 
 // Checker ...
-type Checker struct {
+type Cli struct {
 	Args Arguments
 	Now  time.Time
 }
 
 // NewChecker ...
-func NewChecker(args []string) (*Checker, error) {
+func NewChecker(args []string) (*Cli, error) {
 	opts := Arguments{}
 
 	opts.Version = func() {
@@ -79,14 +79,14 @@ func NewChecker(args []string) (*Checker, error) {
 		return nil, err
 	}
 
-	return &Checker{
+	return &Cli{
 		Args: opts,
 		Now:  time.Now(),
 	}, nil
 }
 
 // Run ...
-func (c Checker) Run(events Events) *checkers.Checker {
+func (c Cli) Run(events Events) *checkers.Checker {
 	if events.Len() != 0 {
 		msg := events.String()
 		event := events.GetCloseEvent()

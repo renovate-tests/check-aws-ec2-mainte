@@ -13,7 +13,7 @@ import (
 )
 
 // FetchEvents ...
-func (c Checker) FetchEvents(ctx context.Context) (events Events, err error) {
+func (c Cli) FetchEvents(ctx context.Context) (events Events, err error) {
 	// The default configuration sources are:
 	// * Environment Variables
 	// * Shared Configuration and Shared Credentials files.
@@ -39,7 +39,7 @@ func (c Checker) FetchEvents(ctx context.Context) (events Events, err error) {
 }
 
 // FetchEC2Events ... Get EC2Events from Real EC2 API
-func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (events Events, err error) {
+func (c Cli) FetchEC2Events(ctx context.Context, cfg aws.Config) (events Events, err error) {
 	mt := ec2api.Mainte{
 		Client:      ec2.New(cfg),
 		InstanceIds: c.Args.InstanceIds, // If fetch events for all instances, instanceId must empty
@@ -55,7 +55,7 @@ func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (events Eve
 
 // FetchEC2MetaEvents ... Get EC2Events from EC2 Metadata
 // If Region or Instance ID is empty or not --all specified
-func (c Checker) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (events Events, err error) {
+func (c Cli) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (events Events, err error) {
 	mt := metadata.Mainte{
 		Client: ec2metadata.New(cfg),
 	}
