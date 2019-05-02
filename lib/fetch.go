@@ -23,12 +23,12 @@ func (c Checker) FetchEvents(ctx context.Context) (events Events, err error) {
 	}
 
 	switch {
-	case c.Opts.Region == "":
+	case c.Args.Region == "":
 		events, err = c.FetchEC2MetaEvents(ctx, cfg)
-	case len(c.Opts.InstanceIds) == 0 && !c.Opts.IsAll:
+	case len(c.Args.InstanceIds) == 0 && !c.Args.IsAll:
 		events, err = c.FetchEC2MetaEvents(ctx, cfg)
 	default: // len(c.Opts.InstanceIds) != 0 || c.Opts.IsAll
-		cfg.Region = c.Opts.Region // Set Region from --region
+		cfg.Region = c.Args.Region // Set Region from --region
 		events, err = c.FetchEC2Events(ctx, cfg)
 	}
 
@@ -42,7 +42,7 @@ func (c Checker) FetchEvents(ctx context.Context) (events Events, err error) {
 func (c Checker) FetchEC2Events(ctx context.Context, cfg aws.Config) (events Events, err error) {
 	mt := ec2api.Mainte{
 		Client:      ec2.New(cfg),
-		InstanceIds: c.Opts.InstanceIds, // If fetch events for all instances, instanceId must empty
+		InstanceIds: c.Args.InstanceIds, // If fetch events for all instances, instanceId must empty
 	}
 
 	evs, err := mt.GetEvents(ctx)

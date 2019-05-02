@@ -19,7 +19,7 @@ var (
 )
 
 // Options ... Commandline Options
-type Options struct {
+type Arguments struct {
 	Region       string        `short:"r" long:"region" env:"AWS_REGION" description:"AWS Region"`
 	CritDuration time.Duration `short:"c" long:"critical-duration" default:"72h" description:"Critical while duration"`
 	InstanceIds  []string      `short:"i" long:"instance-id" description:"Filter as EC2 Instance Ids"`
@@ -54,13 +54,13 @@ func Do() {
 
 // Checker ...
 type Checker struct {
-	Opts Options
+	Args Arguments
 	Now  time.Time
 }
 
 // NewChecker ...
 func NewChecker(args []string) (*Checker, error) {
-	opts := Options{}
+	opts := Arguments{}
 
 	opts.Version = func() {
 		fmt.Fprintf(
@@ -80,7 +80,7 @@ func NewChecker(args []string) (*Checker, error) {
 	}
 
 	return &Checker{
-		Opts: opts,
+		Args: opts,
 		Now:  time.Now(),
 	}, nil
 }
@@ -91,7 +91,7 @@ func (c Checker) Run(events Events) *checkers.Checker {
 		msg := events.String()
 		event := events.GetCloseEvent()
 
-		if event.IsTimeOver(c.Now, c.Opts.CritDuration) {
+		if event.IsTimeOver(c.Now, c.Args.CritDuration) {
 			return checkers.Critical(msg)
 		}
 		return checkers.Warning(msg)
