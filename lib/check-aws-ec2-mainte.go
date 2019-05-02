@@ -58,21 +58,23 @@ type Cli struct {
 	Now  time.Time
 }
 
+// Usage ...
+func Usage() {
+	fmt.Fprintf(
+		os.Stderr,
+		"Version: %v\nGoVer: %v\nAwsSDKVer: %v\nBuildDate: %v\n",
+		version,
+		runtime.Version(),
+		aws.SDKVersion,
+		buildDate,
+	)
+	os.Exit(1)
+}
+
 // NewChecker ...
 func NewChecker(args []string) (*Cli, error) {
 	opts := Arguments{}
-
-	opts.Version = func() {
-		fmt.Fprintf(
-			os.Stderr,
-			"Version: %v\nGoVer: %v\nAwsSDKVer: %v\nBuildDate: %v\n",
-			version,
-			runtime.Version(),
-			aws.SDKVersion,
-			buildDate,
-		)
-		os.Exit(1)
-	}
+	opts.Version = Usage
 
 	_, err := flags.ParseArgs(&opts, args)
 	if err != nil {
