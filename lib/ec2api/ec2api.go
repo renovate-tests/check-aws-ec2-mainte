@@ -23,8 +23,7 @@ func (mt Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 	}
 
 	req := mt.Client.DescribeInstanceStatusRequest(options)
-	req.SetContext(ctx)
-	res, err := req.Send()
+	res, err := req.Send(ctx)
 	if err != nil {
 		return
 	}
