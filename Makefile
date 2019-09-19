@@ -4,6 +4,11 @@ RELEASE_FILE := $(notdir $(RELEASE_URL))
 .PHONY: default
 default: build
 
+
+.PHONY: bootstrap
+bootstrap:
+	go get -v github.com/laher/goxc
+
 .PHONY: build
 build:
 	goxc -build-ldflags="-w -s -X github.com/ntrv/check-aws-ec2-mainte/lib.version=$(shell git describe --tags)"
