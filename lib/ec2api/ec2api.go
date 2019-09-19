@@ -9,7 +9,7 @@ import (
 )
 
 type Mainte struct {
-	Client      ec2iface.EC2API
+	Client      ec2iface.ClientAPI
 	InstanceIds []string
 }
 

@@ -8,7 +8,7 @@ import (
 )
 
 type Mainte struct {
-	Client *ec2metadata.EC2Metadata
+	Client *ec2metadata.Client
 }
 
 // Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
