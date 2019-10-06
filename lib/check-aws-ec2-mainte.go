@@ -56,8 +56,9 @@ func Do() {
 
 // Cli ...
 type Cli struct {
-	Args Arguments
-	Now  time.Time
+	Args    Arguments
+	Command string
+	Now     time.Time
 }
 
 // Usage ...
@@ -78,14 +79,15 @@ func NewCli(args []string) (*Cli, error) {
 	opts := Arguments{}
 	opts.Version = Usage
 
-	_, err := flags.ParseArgs(&opts, args)
+	args, err := flags.ParseArgs(&opts, args)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Cli{
-		Args: opts,
-		Now:  time.Now(),
+		Args:    opts,
+		Command: args[0],
+		Now:     time.Now(),
 	}, nil
 }
 
