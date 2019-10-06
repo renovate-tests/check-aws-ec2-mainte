@@ -39,7 +39,7 @@ func Do() {
 		}
 	}()
 
-	c, err := NewChecker(os.Args)
+	c, err := NewCli(os.Args)
 	if err != nil {
 		ckr = checkers.Unknown(err.Error())
 		return
@@ -51,7 +51,7 @@ func Do() {
 		return
 	}
 
-	ckr = c.Run(events)
+	ckr = c.Evaluate(events)
 }
 
 // Cli ...
@@ -73,8 +73,8 @@ func Usage() {
 	os.Exit(1)
 }
 
-// NewChecker ...
-func NewChecker(args []string) (*Cli, error) {
+// NewCli ...
+func NewCli(args []string) (*Cli, error) {
 	opts := Arguments{}
 	opts.Version = Usage
 
@@ -89,8 +89,8 @@ func NewChecker(args []string) (*Cli, error) {
 	}, nil
 }
 
-// Run ...
-func (c Cli) Run(evs events.Events) *checkers.Checker {
+// Evaluate ...
+func (c Cli) Evaluate(evs events.Events) *checkers.Checker {
 	if evs.Len() != 0 {
 		msg := evs.String()
 		event := evs.GetCloseEvent()
