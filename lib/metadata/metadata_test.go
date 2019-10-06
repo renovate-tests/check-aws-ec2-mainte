@@ -21,15 +21,15 @@ var testCases = []struct {
 	instanceID string
 }{
 	{
-		fname:      "./testdata/case1.json",
+		fname:      "./testdata/single.json",
 		instanceID: "i-09e032cce9ef71d84",
 	},
 	{
-		fname:      "./testdata/case2.json",
+		fname:      "./testdata/multi.json",
 		instanceID: "i-98fa339d",
 	},
 	{
-		fname:      "./testdata/case3.json",
+		fname:      "./testdata/empty.json",
 		instanceID: "i-0342eeba4f394a064",
 	},
 }
