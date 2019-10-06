@@ -5,8 +5,6 @@ import (
 	"sort"
 	"strings"
 	"time"
-
-	"github.com/ntrv/check-aws-ec2-mainte/lib/ec2api"
 )
 
 // Events ...
@@ -78,20 +76,6 @@ func (evs Events) Less(i, j int) bool {
 // Swap ... Implement sort.Interface
 func (evs Events) Swap(i, j int) {
 	evs[i], evs[j] = evs[j], evs[i]
-}
-
-// SetEC2APIEvents ...
-func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
-	for _, event := range events {
-		*evs = append(*evs, Event{
-			Code:        event.Code,
-			InstanceID:  event.InstanceID,
-			NotBefore:   event.NotBefore,
-			NotAfter:    event.NotAfter,
-			Description: event.Description,
-		})
-	}
-	evs.updateStates()
 }
 
 // CreateMessage ... Information for displaying to Mackerel

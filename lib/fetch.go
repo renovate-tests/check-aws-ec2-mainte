@@ -46,12 +46,7 @@ func (c Cli) FetchEC2Events(ctx context.Context, cfg aws.Config) (evs events.Eve
 		InstanceIds: c.Args.InstanceIds, // If fetch events for all instances, instanceId must empty
 	}
 
-	ec2evs, err := mt.GetEvents(ctx)
-	if err != nil {
-		return
-	}
-	evs.SetEC2APIEvents(ec2evs)
-	return
+	return mt.Fetch(ctx)
 }
 
 // FetchEC2MetaEvents ... Get EC2Events from EC2 Metadata
