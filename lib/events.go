@@ -86,7 +86,7 @@ func (evs *Events) SetMetadataEvents(events metadata.Events) {
 	for _, event := range events {
 		*evs = append(*evs, Event{
 			Code:        event.Code,
-			InstanceID:  event.InstanceId,
+			InstanceID:  event.InstanceID,
 			NotBefore:   time.Time(event.NotBefore),
 			NotAfter:    time.Time(event.NotAfter),
 			Description: event.Description,
@@ -100,7 +100,7 @@ func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
 	for _, event := range events {
 		*evs = append(*evs, Event{
 			Code:        event.Code,
-			InstanceID:  event.InstanceId,
+			InstanceID:  event.InstanceID,
 			NotBefore:   event.NotBefore,
 			NotAfter:    event.NotAfter,
 			Description: event.Description,

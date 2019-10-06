@@ -7,7 +7,7 @@ import (
 // Event ...
 type Event struct {
 	Code        ec2.EventCode  `json:"Code"`
-	InstanceId  string         `json:"-"`
+	InstanceID  string         `json:"-"`
 	NotBefore   MetaMainteTime `json:"NotBefore"`
 	NotAfter    MetaMainteTime `json:"NotAfter"`
 	Description string         `json:"Description"`

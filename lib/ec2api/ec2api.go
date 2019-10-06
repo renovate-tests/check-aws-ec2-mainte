@@ -8,12 +8,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/ec2iface"
 )
 
+// Mainte ...
 type Mainte struct {
 	Client      ec2iface.ClientAPI
 	InstanceIds []string
 }
 
-// Call API and get specified events
+// GetEvents ... Call API and get specified events
 func (mt Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 	options := &ec2.DescribeInstanceStatusInput{}
 
@@ -34,7 +35,7 @@ func (mt Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 			for _, ev := range instance.Events {
 				events = append(events, Event{
 					Code:        ev.Code,
-					InstanceId:  aws.StringValue(instance.InstanceId),
+					InstanceID:  aws.StringValue(instance.InstanceId),
 					NotAfter:    aws.TimeValue(ev.NotAfter),
 					NotBefore:   aws.TimeValue(ev.NotBefore),
 					Description: aws.StringValue(ev.Description),

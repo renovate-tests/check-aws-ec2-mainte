@@ -56,7 +56,7 @@ func readTestCase(t *testing.T, filename string, instanceID string) (events Even
 	if instanceID != "" {
 		// Create expected events to append instance id
 		for i := range events {
-			events[i].InstanceId = instanceID
+			events[i].InstanceID = instanceID
 		}
 	}
 	return
@@ -118,7 +118,7 @@ func TestGetInstanceId(t *testing.T) {
 				Client: ec2metadata.New(cfg),
 			}
 
-			actual, err := mt.GetInstanceId(context.Background())
+			actual, err := mt.GetInstanceID(context.Background())
 			if err != nil {
 				t.Error(err)
 			}
