@@ -13,8 +13,8 @@ import (
 	"github.com/ntrv/check-aws-ec2-mainte/lib/metadata"
 )
 
-// FetchEvents ...
-func (c Cli) FetchEvents(ctx context.Context) (evs events.Events, err error) {
+// Fetch ...
+func (c Cli) Fetch(ctx context.Context) (evs events.Events, err error) {
 	// The default configuration sources are:
 	// * Environment Variables
 	// * Shared Configuration and Shared Credentials files.

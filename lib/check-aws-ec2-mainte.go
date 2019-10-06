@@ -45,7 +45,7 @@ func Do() {
 		return
 	}
 
-	events, err := c.FetchEvents(context.Background())
+	events, err := c.Fetch(context.Background())
 	if err != nil {
 		ckr = checkers.Unknown(err.Error())
 		return
