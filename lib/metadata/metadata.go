@@ -12,8 +12,8 @@ type Mainte struct {
 	Client *ec2metadata.Client
 }
 
-// GetInstanceID ... Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
-func (mm *Mainte) GetInstanceID(ctx context.Context) (string, error) {
+// getInstanceID ... Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
+func (mm *Mainte) getInstanceID(ctx context.Context) (string, error) {
 	id, err := mm.Client.GetMetadata("instance-id")
 	if err != nil {
 		return "", err
@@ -31,7 +31,7 @@ func (mm *Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 		return
 	}
 
-	instanceID, err := mm.GetInstanceID(ctx)
+	instanceID, err := mm.getInstanceID(ctx)
 	if err != nil {
 		return
 	}

@@ -118,7 +118,7 @@ func TestGetInstanceId(t *testing.T) {
 				Client: ec2metadata.New(cfg),
 			}
 
-			actual, err := mt.GetInstanceID(context.Background())
+			actual, err := mt.getInstanceID(context.Background())
 			if err != nil {
 				t.Error(err)
 			}
