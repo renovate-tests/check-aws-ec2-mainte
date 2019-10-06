@@ -3,7 +3,6 @@ package events
 import (
 	"fmt"
 	"sort"
-	"strings"
 	"time"
 )
 
@@ -24,20 +23,6 @@ EVENTS:
 		events = append(events, ev)
 	}
 	return events
-}
-
-// UpdateStates ... Descriptionに含まれている文字列からStateを設定
-func (evs Events) updateStates() {
-	for i, ev := range evs {
-		switch {
-		case strings.Contains(ev.Description, "[Completed]"):
-			evs[i].State = StateCompleted
-		case strings.Contains(ev.Description, "[Canceled]"):
-			evs[i].State = StateCanceled
-		default:
-			evs[i].State = StateActive
-		}
-	}
 }
 
 // GetCloseEvent ... Get oldest EC2Event
