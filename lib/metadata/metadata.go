@@ -14,11 +14,7 @@ type Mainte struct {
 
 // getInstanceID ... Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
 func (mm *Mainte) getInstanceID(ctx context.Context) (string, error) {
-	id, err := mm.Client.GetMetadata("instance-id")
-	if err != nil {
-		return "", err
-	}
-	return id, nil
+	return mm.Client.GetMetadata("instance-id")
 }
 
 // GetEvents ... Get Scheduled Maintenances
