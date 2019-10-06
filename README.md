@@ -39,6 +39,7 @@ EC2 Mainte WARNING: Code: system-reboot, InstanceId: i-1234abcd, Date: 2019-03-2
 command = ["/path/to/check-aws-ec2-mainte", "-c", "48h"]
 env = { AWS_REGION = "ap-northeast-1", TZ = "US/Pacific" }
 max_check_attempts = 3
+timeout_seconds = 15
 ```
 
 ## ToDo
