@@ -52,13 +52,6 @@ func readTestCase(t *testing.T, filename string, instanceID string) (events Even
 	if err := json.Unmarshal(data, &events); err != nil {
 		t.Error(err)
 	}
-
-	if instanceID != "" {
-		// Create expected events to append instance id
-		for i := range events {
-			events[i].InstanceID = instanceID
-		}
-	}
 	return
 }
 
