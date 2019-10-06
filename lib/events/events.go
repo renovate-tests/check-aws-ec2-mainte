@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/ntrv/check-aws-ec2-mainte/lib/ec2api"
-	"github.com/ntrv/check-aws-ec2-mainte/lib/metadata"
 )
 
 // Events ...
@@ -79,20 +78,6 @@ func (evs Events) Less(i, j int) bool {
 // Swap ... Implement sort.Interface
 func (evs Events) Swap(i, j int) {
 	evs[i], evs[j] = evs[j], evs[i]
-}
-
-// SetMetadataEvents ...
-func (evs *Events) SetMetadataEvents(events metadata.Events) {
-	for _, event := range events {
-		*evs = append(*evs, Event{
-			Code:        event.Code,
-			InstanceID:  event.InstanceID,
-			NotBefore:   time.Time(event.NotBefore),
-			NotAfter:    time.Time(event.NotAfter),
-			Description: event.Description,
-			State:       EventState(event.State),
-		})
-	}
 }
 
 // SetEC2APIEvents ...

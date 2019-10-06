@@ -3,8 +3,10 @@ package metadata
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
+	"github.com/ntrv/check-aws-ec2-mainte/lib/events"
 )
 
 // Mainte ...
@@ -33,6 +35,26 @@ func (mm *Mainte) GetEvents(ctx context.Context) (evs Events, err error) {
 	}
 	for i := range evs {
 		evs[i].InstanceID = instanceID
+	}
+	return
+}
+
+// Fetch ..
+func (mm *Mainte) Fetch(ctx context.Context) (evs events.Events, err error) {
+	mevs, err := mm.GetEvents(ctx)
+	if err != nil {
+		return
+	}
+
+	for _, mev := range mevs {
+		evs = append(evs, events.Event{
+			Code:        mev.Code,
+			InstanceID:  mev.InstanceID,
+			NotBefore:   time.Time(mev.NotBefore),
+			NotAfter:    time.Time(mev.NotAfter),
+			Description: mev.Description,
+			State:       events.EventState(mev.State),
+		})
 	}
 	return
 }

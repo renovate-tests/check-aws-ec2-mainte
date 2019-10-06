@@ -61,10 +61,5 @@ func (c Cli) FetchEC2MetaEvents(ctx context.Context, cfg aws.Config) (evs events
 		Client: ec2metadata.New(cfg),
 	}
 
-	metaevs, err := mt.GetEvents(ctx)
-	if err != nil {
-		return
-	}
-	evs.SetMetadataEvents(metaevs)
-	return
+	return mt.Fetch(ctx)
 }
