@@ -1,4 +1,4 @@
-package checkawsec2mainte
+package events
 
 import (
 	"fmt"

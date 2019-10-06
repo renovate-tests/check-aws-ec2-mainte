@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/jessevdk/go-flags"
 	"github.com/mackerelio/checkers"
+
+	"github.com/ntrv/check-aws-ec2-mainte/lib/events"
 )
 
 // Set variable from -X option
@@ -88,10 +90,10 @@ func NewChecker(args []string) (*Cli, error) {
 }
 
 // Run ...
-func (c Cli) Run(events Events) *checkers.Checker {
-	if events.Len() != 0 {
-		msg := events.String()
-		event := events.GetCloseEvent()
+func (c Cli) Run(evs events.Events) *checkers.Checker {
+	if evs.Len() != 0 {
+		msg := evs.String()
+		event := evs.GetCloseEvent()
 
 		if event.IsTimeOver(c.Now, c.Args.CritDuration) {
 			return checkers.Critical(msg)
