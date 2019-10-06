@@ -22,12 +22,12 @@ func (mm *Mainte) getInstanceID(ctx context.Context) (string, error) {
 }
 
 // GetEvents ... Get Scheduled Maintenances
-func (mm *Mainte) GetEvents(ctx context.Context) (events Events, err error) {
+func (mm *Mainte) GetEvents(ctx context.Context) (evs Events, err error) {
 	data, err := mm.Client.GetMetadata("events/maintenance/scheduled")
 	if err != nil {
 		return
 	}
-	if err = json.Unmarshal([]byte(data), &events); err != nil {
+	if err = json.Unmarshal([]byte(data), &evs); err != nil {
 		return
 	}
 
@@ -35,8 +35,8 @@ func (mm *Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 	if err != nil {
 		return
 	}
-	for i := range events {
-		events[i].InstanceID = instanceID
+	for i := range evs {
+		evs[i].InstanceID = instanceID
 	}
 	return
 }
