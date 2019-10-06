@@ -19,13 +19,22 @@ func (mm *Mainte) getInstanceID(ctx context.Context) (string, error) {
 	return mm.Client.GetMetadata("instance-id")
 }
 
-// GetEvents ... Get Scheduled Maintenances
-func (mm *Mainte) GetEvents(ctx context.Context) (evs Events, err error) {
+// getEvents ... Get Scedule from metadata
+func (mm *Mainte) getEvents(ctx context.Context) (mevs Events, err error) {
 	data, err := mm.Client.GetMetadata("events/maintenance/scheduled")
 	if err != nil {
 		return
 	}
-	if err = json.Unmarshal([]byte(data), &evs); err != nil {
+	if err = json.Unmarshal([]byte(data), &mevs); err != nil {
+		return
+	}
+	return
+}
+
+// Fetch ... Get Scheduled Maintenances
+func (mm *Mainte) Fetch(ctx context.Context) (evs events.Events, err error) {
+	mevs, err := mm.getEvents(ctx)
+	if err != nil {
 		return
 	}
 
@@ -33,23 +42,10 @@ func (mm *Mainte) GetEvents(ctx context.Context) (evs Events, err error) {
 	if err != nil {
 		return
 	}
-	for i := range evs {
-		evs[i].InstanceID = instanceID
-	}
-	return
-}
-
-// Fetch ..
-func (mm *Mainte) Fetch(ctx context.Context) (evs events.Events, err error) {
-	mevs, err := mm.GetEvents(ctx)
-	if err != nil {
-		return
-	}
-
 	for _, mev := range mevs {
 		evs = append(evs, events.Event{
 			Code:        mev.Code,
-			InstanceID:  mev.InstanceID,
+			InstanceID:  instanceID,
 			NotBefore:   time.Time(mev.NotBefore),
 			NotAfter:    time.Time(mev.NotAfter),
 			Description: mev.Description,

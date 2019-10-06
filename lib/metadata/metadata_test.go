@@ -95,7 +95,7 @@ func TestGetEvents(t *testing.T) {
 				Client: ec2metadata.New(cfg),
 			}
 
-			actual, err := mt.GetEvents(context.Background())
+			actual, err := mt.getEvents(context.Background())
 			if err != nil {
 				t.Error(err)
 			}
