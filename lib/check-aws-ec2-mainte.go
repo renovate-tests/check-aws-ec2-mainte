@@ -18,7 +18,7 @@ var (
 	buildDate = "1970-01-01 09:00:00+09:00" // date --rfc-3339=seconds
 )
 
-// Options ... Commandline Options
+// Arguments ... Commandline Options
 type Arguments struct {
 	Region       string        `short:"r" long:"region" env:"AWS_REGION" description:"AWS Region"`
 	CritDuration time.Duration `short:"c" long:"critical-duration" default:"72h" description:"Critical while duration"`
@@ -52,7 +52,7 @@ func Do() {
 	ckr = c.Run(events)
 }
 
-// Checker ...
+// Cli ...
 type Cli struct {
 	Args Arguments
 	Now  time.Time
