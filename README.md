@@ -8,7 +8,7 @@ Mackerel plugin to detect EC2 Retirement
 [![Maintainability](https://api.codeclimate.com/v1/badges/84698652a28fdaf6bf5e/maintainability)](https://codeclimate.com/github/ntrv/check-aws-ec2-mainte/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/84698652a28fdaf6bf5e/test_coverage)](https://codeclimate.com/github/ntrv/check-aws-ec2-mainte/test_coverage)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ntrv/check-aws-ec2-mainte)](https://goreportcard.com/report/github.com/ntrv/check-aws-ec2-mainte)
-![Go1.12](https://img.shields.io/badge/Go-1.12-blue.svg)
+![Go1.13](https://img.shields.io/badge/Go-1.13-blue.svg)
 ![GitHub](https://img.shields.io/github/license/ntrv/check-aws-ec2-mainte.svg)
 
 ## Install

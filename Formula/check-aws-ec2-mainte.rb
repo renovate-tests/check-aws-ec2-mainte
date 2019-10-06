@@ -1,9 +1,9 @@
 class CheckAwsEc2Mainte < Formula
   desc 'Mackerel plugin to detect EC2 Retirement'
   homepage 'https://github.com/ntrv/check-aws-ec2-mainte'
-  version '0.1.3'
-  sha256 'e67b8ded88d90f12075d59a1ed7f9cb5f5f67a7a612b69384f07399a6dc8b849'
-  url 'https://github.com/ntrv/check-aws-ec2-mainte/releases/download/v0.1.3/check-aws-ec2-mainte_darwin_amd64.zip'
+  version '0.2.0'
+  sha256 'aedfa5785548be2259b94e23548d661a29607aa69a9a235735aa1d5d202798d0'
+  url 'https://github.com/ntrv/check-aws-ec2-mainte/releases/download/v0.2.0/check-aws-ec2-mainte_darwin_amd64.zip'
   head 'https://github.com/ntrv/check-aws-ec2-mainte.git'
 
   def install
