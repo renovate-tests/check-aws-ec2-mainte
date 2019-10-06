@@ -43,7 +43,7 @@ func initMetaConfig(t *testing.T, endpoint string) aws.Config {
 	return cfg
 }
 
-func readTestCase(t *testing.T, filename string, instanceId string) (events Events, data []byte) {
+func readTestCase(t *testing.T, filename string, instanceID string) (events Events, data []byte) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		t.Error(err)
@@ -53,10 +53,10 @@ func readTestCase(t *testing.T, filename string, instanceId string) (events Even
 		t.Error(err)
 	}
 
-	if instanceId != "" {
+	if instanceID != "" {
 		// Create expected events to append instance id
-		for i, _ := range events {
-			events[i].InstanceId = instanceId
+		for i := range events {
+			events[i].InstanceId = instanceID
 		}
 	}
 	return

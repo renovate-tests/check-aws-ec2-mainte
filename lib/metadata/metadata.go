@@ -7,11 +7,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/ec2metadata"
 )
 
+// Mainte ...
 type Mainte struct {
 	Client *ec2metadata.Client
 }
 
-// Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
+// GetInstanceId ... Get Instance ID from http://169.254.169.254/latest/meta-data/instance-id
 func (mm *Mainte) GetInstanceId(ctx context.Context) (string, error) {
 	id, err := mm.Client.GetMetadata("instance-id")
 	if err != nil {
@@ -20,7 +21,7 @@ func (mm *Mainte) GetInstanceId(ctx context.Context) (string, error) {
 	return id, nil
 }
 
-// Get Scheduled Maintenances
+// GetEvents ... Get Scheduled Maintenances
 func (mm *Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 	data, err := mm.Client.GetMetadata("events/maintenance/scheduled")
 	if err != nil {
@@ -34,7 +35,7 @@ func (mm *Mainte) GetEvents(ctx context.Context) (events Events, err error) {
 	if err != nil {
 		return
 	}
-	for i, _ := range events {
+	for i := range events {
 		events[i].InstanceId = instanceId
 	}
 	return
