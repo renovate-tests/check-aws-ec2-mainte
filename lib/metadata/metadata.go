@@ -54,3 +54,15 @@ func (mm *Mainte) Fetch(ctx context.Context) (evs events.Events, err error) {
 	}
 	return
 }
+
+// FetchSpotEvent ...
+func (mm *Mainte) FetchSpotEvent(ctx context.Context) (sev SpotEvent, err error) {
+	data, err := mm.Client.GetMetadata("spot/instance-action")
+	if err != nil {
+		return
+	}
+	if err = json.Unmarshal([]byte(data), &sev); err != nil {
+		return
+	}
+	return
+}
