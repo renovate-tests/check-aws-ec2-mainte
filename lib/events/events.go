@@ -29,7 +29,7 @@ EVENTS:
 }
 
 // UpdateStates ... Descriptionに含まれている文字列からStateを設定
-func (evs Events) UpdateStates() {
+func (evs Events) updateStates() {
 	for i, ev := range evs {
 		switch {
 		case strings.Contains(ev.Description, "[Completed]"):
@@ -91,7 +91,7 @@ func (evs *Events) SetEC2APIEvents(events ec2api.Events) {
 			Description: event.Description,
 		})
 	}
-	evs.UpdateStates()
+	evs.updateStates()
 }
 
 // CreateMessage ... Information for displaying to Mackerel
