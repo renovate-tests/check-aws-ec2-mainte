@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
 	"path/filepath"
 	"testing"
 
@@ -14,6 +12,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/ntrv/check-aws-ec2-mainte/lib/internal/test"
 )
 
 var testCases = []struct {
@@ -32,18 +32,6 @@ var testCases = []struct {
 		fname:      "./testdata/case3.json",
 		instanceId: "i-0342eeba4f394a064",
 	},
-}
-
-func initTestServer(patterns map[string]string) *httptest.Server {
-	return httptest.NewServer(
-		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if resp, ok := patterns[r.RequestURI]; ok {
-				w.Write([]byte(resp))
-				return
-			}
-			http.Error(w, "not found", http.StatusNotFound)
-		}),
-	)
 }
 
 func initMetaConfig(t *testing.T, endpoint string) aws.Config {
@@ -96,7 +84,7 @@ func TestGetEvents(t *testing.T) {
 			expected, data := readTestCase(t, c.fname, c.instanceId)
 
 			// Create dummy metadata endpoint
-			server := initTestServer(map[string]string{
+			server := test.InitTestServer(map[string]string{
 				"/latest/meta-data/events/maintenance/scheduled": string(data),
 				"/latest/meta-data/instance-id":                  c.instanceId,
 			})
@@ -120,7 +108,7 @@ func TestGetInstanceId(t *testing.T) {
 	for _, c := range testCases {
 		t.Run(filepath.Base(c.fname), func(t *testing.T) {
 			// Create dummy metadata endpoint
-			server := initTestServer(map[string]string{
+			server := test.InitTestServer(map[string]string{
 				"/latest/meta-data/instance-id": c.instanceId,
 			})
 			defer server.Close()
