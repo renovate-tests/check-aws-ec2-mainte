@@ -18,19 +18,19 @@ import (
 
 var testCases = []struct {
 	fname      string
-	instanceId string
+	instanceID string
 }{
 	{
 		fname:      "./testdata/case1.json",
-		instanceId: "i-09e032cce9ef71d84",
+		instanceID: "i-09e032cce9ef71d84",
 	},
 	{
 		fname:      "./testdata/case2.json",
-		instanceId: "i-98fa339d",
+		instanceID: "i-98fa339d",
 	},
 	{
 		fname:      "./testdata/case3.json",
-		instanceId: "i-0342eeba4f394a064",
+		instanceID: "i-0342eeba4f394a064",
 	},
 }
 
@@ -65,7 +65,7 @@ func readTestCase(t *testing.T, filename string, instanceId string) (events Even
 func TestMarshalNoError(t *testing.T) {
 	for _, c := range testCases {
 		t.Run(filepath.Base(c.fname), func(t *testing.T) {
-			events, expected := readTestCase(t, c.fname, c.instanceId)
+			events, expected := readTestCase(t, c.fname, c.instanceID)
 
 			actual, err := json.MarshalIndent(events, "", " ")
 			if err != nil {
@@ -81,12 +81,12 @@ func TestMarshalNoError(t *testing.T) {
 func TestGetEvents(t *testing.T) {
 	for _, c := range testCases {
 		t.Run(filepath.Base(c.fname), func(t *testing.T) {
-			expected, data := readTestCase(t, c.fname, c.instanceId)
+			expected, data := readTestCase(t, c.fname, c.instanceID)
 
 			// Create dummy metadata endpoint
 			server := test.InitTestServer(map[string]string{
 				"/latest/meta-data/events/maintenance/scheduled": string(data),
-				"/latest/meta-data/instance-id":                  c.instanceId,
+				"/latest/meta-data/instance-id":                  c.instanceID,
 			})
 			defer server.Close()
 
@@ -109,7 +109,7 @@ func TestGetInstanceId(t *testing.T) {
 		t.Run(filepath.Base(c.fname), func(t *testing.T) {
 			// Create dummy metadata endpoint
 			server := test.InitTestServer(map[string]string{
-				"/latest/meta-data/instance-id": c.instanceId,
+				"/latest/meta-data/instance-id": c.instanceID,
 			})
 			defer server.Close()
 
@@ -122,7 +122,7 @@ func TestGetInstanceId(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-			assert.Equal(t, c.instanceId, actual)
+			assert.Equal(t, c.instanceID, actual)
 		})
 	}
 }
